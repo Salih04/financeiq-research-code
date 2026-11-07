@@ -7,8 +7,7 @@ This is FinanceIQ's minimum *consumer-side* request for a separately reviewed,
 one-way PIT Kernel interface. It is not a Kernel implementation plan, an adopted
 exchange schema, a source-rights decision, a research registration, or permission
 to read real membership, historical observations, outcomes or holdouts. It changes
-no existing source, model, experiment or evaluation. See [FIQ-07 issue #2]
-(https://github.com/Salih04/financeiq-research-code/issues/2).
+no existing source, model, experiment or evaluation. See [FIQ-07 issue #2](https://github.com/Salih04/financeiq-research-code/issues/2).
 
 ## Authority and current capability
 
