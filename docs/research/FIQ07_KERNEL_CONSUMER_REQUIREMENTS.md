@@ -36,6 +36,15 @@ names, cardinality, serialization, allowed source channels, rights and transport
 version are **UNSET** pending separate Kernel/owner review. A timestamp's upper
 bound must be used conservatively when checking availability.
 
+The proposed interface must also keep **independent as-of and system-time
+cutoffs**. Source-publication availability is not the system's recording or
+settlement time: a later imported/replayed assertion must not become visible in
+an earlier system snapshot. An independently verified commit authority (or a
+separately reviewed equivalent) must bind the stored version to its system-time
+cutoff. Acquisition, insertion and source effective dates must never silently
+substitute for either public knowledge time or settled system time. These are
+contract requirements, **not** evidence that an exporter already provides them.
+
 | Outcome-free concept | Minimum required evidence | FinanceIQ-side rule it enables |
 | --- | --- | --- |
 | Official index period | Year/quarter label, official effective date/instant (historical Europe/Istanbul), provenance and precision | Bind formation F to the true period, not download or first-trade date |
@@ -43,6 +52,7 @@ bound must be used conservatively when checking availability.
 | First-party public copy | Source kind, document ID, content hash, publication lower/upper bounds, retrieval time and ordered-copy lineage | Enforce strictly pre-F availability and B2/22-B compatible copy chronology |
 | Channel completeness | Scope, retention limits, workbook coverage, documented BIST archive query/date/result count/pagination/caps and found-copy reconciliation | Fail closed when required source-channel completeness or negative search is unproved |
 | Identity mapping | Source security/share code, stable security and issuer IDs, evidence ID, effective-valid interval, equivalence version and collision flags | Apply adopted 21-A effective-dated identity equivalence without present-day inference |
+| Membership collection and assertion | Collection definition, member kind (listing/security/entity or reviewed equivalent), effective local civil interval and zone, typed member identity, source version/chain, public-knowledge bound, settled system-time authority, and explicit positive/negative/withdrawn evidence | Preserve source assertions and uncertainty without deriving a research universe or inferring a missing roster row as negative evidence |
 | BIST review or change event | Official ADD/REMOVE/other applicable action, public bounds, effective time, member/reserve role, ordering and evidence of integration in the periodic table | Apply M5/M6, same-day IN0/OUT0 and conditional predecessor M7 |
 | KAP statement template | Versioned first-party template category/effective interval, documented identity binding and holdings-class evidence or null | Classify G03 bank/insurance/standard TFRS; preserve unknown holdings/null |
 | Evidence envelope | Snapshot/request binding, content and algorithm digests, contract version, allowed field set, immutable source references | Pin a reviewed read-only consumer; reject incompatible or altered inputs |
@@ -52,6 +62,32 @@ outcome availability, empirical coverage counts, individual protected-period row
 or any private corpus for the public repository. Research selection/inference
 belongs to FinanceIQ; source acquisition, proof and lineage belong to Kernel.
 No FinanceIQ result or performance feedback is sent to Kernel.
+
+## Membership and timing interpretation (proposed, not implemented)
+
+An internal source-membership answer must preserve the distinction between
+**explicitly evidenced nonmembership** and **absence of evidence**. Unknown,
+ambiguous and conflicting claims remain separate refusal states (or separately
+reviewed equivalents), never `false`, zero, or an inferred negative row.
+A future-effective assertion known before its effective interval begins must
+not be applied early. A superseded or withdrawn assertion must not be silently
+revived from an older chain version. Member-kind mismatches, multiple identity
+candidates and conflicting admissible chains block the affected operation.
+
+Collection-local civil dates and evidence of an official effective *instant*
+are different precision classes. A civil interval alone does not establish
+intraday event ordering or a formation instant. Where FinanceIQ's U1 rule needs
+that ordering, require separately evidenced precision; otherwise refuse that
+formation rather than inventing an exchange opening/closing clock.
+
+FinanceIQ must keep public-knowledge `as_of`, recorded `system_as_of` and
+formation/economic valid time distinct, and bind them to the exact requested
+snapshot, digest, rights assessment and source version. Any proposed transfer
+of row-level material into a private research runtime needs its own lawful
+operation-specific rights and scope decision; **a public code-only document is
+not a data-sharing authorization**. Protected-period individual rows are not
+unlocked by this interface design or by the owner-approved aggregate-only OD-1
+metadata allowance.
 
 ## Fail-closed consumer requirements (not yet implemented)
 
