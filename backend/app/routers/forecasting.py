@@ -1,0 +1,352 @@
+import logging
+
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+logger = logging.getLogger("forecasting")
+
+from app.core.dependencies import get_current_user, require_access, require_shared_data_writer
+from app.core.rate_limit import rate_limit
+from app.database import get_db
+from app.models.user import User
+from app.schemas.forecasting import (
+    AvailableFiltersResponse,
+    CsvTrainRequest,
+    CsvRunRequest,
+    EvaluationOut,
+    EvaluationRequest,
+    ExplanationResponse,
+    GetStocksResponse,
+    ParametersResponse,
+    ParameterCatalogOut,
+    PortfolioAnalysisRequest,
+    PortfolioAnalysisResponse,
+    PredictRequest,
+    PredictHistoryOut,
+    SectorHeatmapOut,
+    StockDetailResponse,
+    TrendSeriesOut,
+    TrainModelRequest,
+    TrainModelResponse,
+    UploadPresetRequest,
+    UploadPresetResponse,
+)
+from app.services.forecasting_service import (
+    analyze_portfolio,
+    get_available_filters,
+    get_parameters_for_sector,
+    get_parameter_catalog,
+    get_predict_history,
+    get_sector_heatmap_data,
+    get_stock_detail,
+    get_stock_explanation,
+    get_yearly_trend_series,
+    import_winner_excel_preset,
+    run_time_cv_evaluation,
+    run_forecast_for_sector,
+    train_sector_success_model,
+)
+from app.services import forecasting_csv_service as _csv_svc
+
+router = APIRouter(tags=["forecasting"])
+
+
+@router.post("/upload-data", response_model=UploadPresetResponse)
+def upload_data(
+    body: UploadPresetRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_shared_data_writer),
+):
+    try:
+        return import_winner_excel_preset(db, body.file_name, current_user=current_user)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@router.post("/train-model", response_model=TrainModelResponse)
+def train_model(
+    body: TrainModelRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_shared_data_writer),
+):
+    try:
+        return train_sector_success_model(
+            db,
+            year=body.year,
+            sector=body.sector,
+            top_n_parameters=body.top_n_parameters,
+            current_user=current_user,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa - never raw 500 for the train action
+        logger.exception("train-model failed")
+        raise HTTPException(status_code=400,
+                            detail=f"Training could not run for {body.sector} {body.year}. "
+                                   f"Check that quarterly fundamentals up to Q4 exist for this sector/year. ({type(exc).__name__})")
+
+
+@router.get("/get-stocks", response_model=GetStocksResponse)
+def get_stocks(
+    year: int,
+    sector: str,
+    user_type: str = "individual",
+    risk_level: str = "medium",
+    investment_scope: float | None = None,
+    model_type: str = "scoring",
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        return run_forecast_for_sector(
+            db,
+            year=year,
+            sector=sector,
+            created_by_user_id=current_user.id,
+            user_type=user_type,
+            risk_level=risk_level,
+            investment_scope=investment_scope,
+            model_type=model_type,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@router.post("/predict", response_model=GetStocksResponse)
+def predict(
+    body: PredictRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        return run_forecast_for_sector(
+            db,
+            year=body.year,
+            sector=body.sector,
+            created_by_user_id=current_user.id,
+            user_type=body.user_type,
+            risk_level=body.risk_level,
+            investment_scope=body.investment_scope,
+            model_type=body.model_type,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    except Exception as exc:  # noqa - never raw 500 for the forecast action
+        logger.exception("predict failed")
+        raise HTTPException(status_code=400,
+                            detail=f"Forecast could not complete for {body.sector} {body.year}. "
+                                   f"Train parameters first and ensure fundamentals exist. ({type(exc).__name__})")
+
+
+@router.post("/predict/evaluate", response_model=EvaluationOut)
+def evaluate_predict_family(
+    body: EvaluationRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_shared_data_writer),
+):
+    try:
+        return run_time_cv_evaluation(
+            db,
+            sector=body.sector,
+            model_type=body.model_type,
+            window_size=body.window_size,
+            created_by_user_id=current_user.id,
+            current_user=current_user,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa - never raw 500 for time-CV
+        logger.exception("predict/evaluate failed")
+        raise HTTPException(status_code=400,
+                            detail=f"Time-CV could not complete for {body.sector}. Needs enough historical "
+                                   f"years of fundamentals. ({type(exc).__name__})")
+
+
+@router.get("/predict/history", response_model=PredictHistoryOut)
+def predict_history(
+    limit: int = 30,
+    sector: str | None = None,
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    try:
+        return get_predict_history(db, limit=limit, sector=sector)
+    except Exception:  # noqa - history must never 500; empty is fine
+        logger.exception("predict/history failed")
+        return {"items": []}
+
+
+@router.get("/predict/trends", response_model=TrendSeriesOut)
+def predict_trends(
+    stock_code: str,
+    sector: str | None = None,
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    return get_yearly_trend_series(db, stock_code=stock_code, sector=sector)
+
+
+@router.get("/predict/heatmap", response_model=SectorHeatmapOut)
+def predict_heatmap(
+    year: int,
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    return get_sector_heatmap_data(db, year=year)
+
+
+@router.get("/get-parameters", response_model=ParametersResponse)
+def get_parameters(
+    year: int,
+    sector: str,
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    try:
+        return get_parameters_for_sector(db, year=year, sector=sector)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@router.get("/parameters/catalog", response_model=ParameterCatalogOut)
+def parameters_catalog(
+    _: User = Depends(get_current_user),
+):
+    return get_parameter_catalog()
+
+
+@router.post("/get-portfolio-analysis", response_model=PortfolioAnalysisResponse)
+def get_portfolio_analysis(
+    body: PortfolioAnalysisRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        return analyze_portfolio(
+            db,
+            year=body.year,
+            sector=body.sector,
+            stock_codes=body.stock_codes,
+            created_by_user_id=current_user.id,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@router.get("/get-stock-detail", response_model=StockDetailResponse)
+def get_stock_detail_endpoint(
+    run_id: int,
+    stock_code: str,
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    item = get_stock_detail(db, run_id=run_id, stock_code=stock_code)
+    if not item:
+        raise HTTPException(status_code=404, detail="Stock detail not found for run.")
+    return item
+
+
+@router.get("/get-explanation", response_model=ExplanationResponse)
+def get_explanation(
+    run_id: int,
+    stock_code: str,
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    item = get_stock_explanation(db, run_id=run_id, stock_code=stock_code)
+    if not item:
+        raise HTTPException(status_code=404, detail="Explanation not found for run.")
+    return item
+
+
+@router.get("/forecasting/filters", response_model=AvailableFiltersResponse)
+def get_filters(
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    return get_available_filters(db)
+
+
+# ── CSV-backed pipeline endpoints (no DB required) ────────────────────────────
+
+@router.get("/forecasting/options")
+def csv_options(
+    target_mode: str = "finalized_only",
+    _: User | None = Depends(require_access),
+):
+    try:
+        return _csv_svc.get_options(target_mode=target_mode)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+
+
+@router.post("/forecasting/train")
+def csv_train(body: CsvTrainRequest, _: User | None = Depends(require_access),
+              __: None = Depends(rate_limit("forecast-train"))):
+    try:
+        return _csv_svc.train_parameters(
+            train_year_from=body.train_year_from,
+            train_year_to=body.train_year_to,
+            top_n=body.top_n,
+            target_mode=body.target_mode,
+        )
+    except (ValueError, FileNotFoundError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    except Exception as exc:
+        logger.exception("forecasting/train failed")
+        raise HTTPException(status_code=400, detail=f"Training failed. ({type(exc).__name__}: {exc})")
+
+
+@router.post("/forecasting/run")
+def csv_run(body: CsvRunRequest, _: User | None = Depends(require_access)):
+    try:
+        return _csv_svc.run_forecast(
+            year=body.year,
+            trained_weights=body.trained_weights,
+            risk_level=body.risk_level,
+            user_type=body.user_type,
+        )
+    except (ValueError, FileNotFoundError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    except Exception as exc:
+        logger.exception("forecasting/run failed")
+        raise HTTPException(status_code=400, detail=f"Forecast failed. ({type(exc).__name__}: {exc})")
+
+
+@router.get("/forecasting/inference")
+def csv_inference(
+    year: int = 2025,
+    top_n: int = 12,
+    _: User | None = Depends(require_access),
+    __: None = Depends(rate_limit("forecast-inference")),
+):
+    """Forward 2026 forecast: train finalized 2020–2024, rank `year` inference rows.
+    Public. Unevaluated forward output — never a backtest."""
+    try:
+        return _csv_svc.inference_forecast(input_year=year, top_n=top_n)
+    except (ValueError, FileNotFoundError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    except Exception as exc:
+        logger.exception("forecasting/inference failed")
+        raise HTTPException(status_code=400, detail=f"Inference failed. ({type(exc).__name__}: {exc})")
+
+
+@router.get("/forecasting/explain/{ticker}")
+def csv_explain(
+    ticker: str,
+    year: int | None = None,
+    _: User | None = Depends(require_access),
+    __: None = Depends(rate_limit("forecast-explain")),
+):
+    try:
+        return _csv_svc.explain_ticker(ticker=ticker, year=year)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
