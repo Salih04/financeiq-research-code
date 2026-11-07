@@ -606,6 +606,11 @@
       "sha256": "f6c606412754bf4c7f08cb445092e8617270e3bc5ab9bd7d3cf59be904a1bc22"
     },
     {
+      "bytes": 13452,
+      "path": "docs/research/UNIVERSE_RULE.md",
+      "sha256": "0034e36895daceb9af21790d95b3dff8b6067aed2f1c5470bbf88318321bab53"
+    },
+    {
       "bytes": 23350,
       "path": "experiments/calibration_bench.py",
       "sha256": "324b221feaf2fa74b59d9c67099b79b16347c376ee209056d7245427b365eb09"
