@@ -20,7 +20,7 @@ public APIs, approved export formats or promises of deployability.
 
 | Existing internal selector or report | Verified software semantics | Missing before FinanceIQ can consume it |
 | --- | --- | --- |
-| KER-09 `persisted_membership_as_of` | As-of evidence for one explicitly typed member in a collection. Responses distinguish `MEMBER`, evidenced `NOT_MEMBER`, `UNKNOWN`, `AMBIGUOUS` and `CONFLICT`, and retain source assertion lineage and later-effective pending claims. | Approved exchange row type, legal per-operation export, exact query and response schema, collection-definition rights and source completeness |
+| KER-09 `persisted_membership_as_of` | As-of evidence for one explicitly typed member in a collection. Responses distinguish `MEMBER`, evidenced `NOT_MEMBER`, `UNKNOWN`, `AMBIGUOUS` and `CONFLICT`, and return covering assertion IDs, a known-at upper bound and pending-claim IDs; the response does **not** include complete source-document or version-chain lineage. | Approved exchange row type, legal per-operation export, exact query and response schema, collection-definition rights and source completeness |
 | KER-09 `persisted_memberships_as_of` | Returns source-evidenced member results at the requested cutoff; **not a full official roster** or proof that omitted members are nonmembers. | Publisher channel inventory, negative-search and copy-set completeness evidence; no inferred absent rows |
 | KER-10 `persisted_identity_record_as_of` | Source-evidenced, typed historical binding; returns `BOUND`, `UNKNOWN` or `CONFLICT` with version IDs. Requires a settled system cutoff. | Separately evidenced durable **listing → security → issuer** mapping. A BIST listing/code binding is not itself issuer/security equivalence |
 | KER-13e `persisted_quarterly_membership_counts` / local report | Compares explicitly presented membership evidence and identity at aligned cutoffs; the owner-local report describes **same-publisher channel consistency**. | Independent-source corroboration, G03 filing metadata, comprehensive research formation coverage; any proposed publication of counts needs separate clearance |
@@ -30,6 +30,16 @@ Internal APIs require **no FinanceIQ write-back**. No source bytes, local
 paths, company codes, observed pilot counts, returns, securities or empirical
 performance belong in this public code-only review. A rights-safe internal
 reference implementation is not proof of permission to transfer actual rows.
+
+**Current response is not provenance-complete.** KER-09's source-evidence
+selector returns `assertion_ids`, `known_at_upper` and a limited `pending`
+summary, but not `source_doc_id`, `source_hash`, full supersession-chain
+records, or the settled commit-authority proof as exchange fields. These are
+used or validated internally, not exposed as a self-contained transferable
+attestation. An independently reviewed rights-scoped projection would need
+to define how the minimum required lineage/authority is authenticated without
+exposing prohibited source material. The consumer must reject missing
+lineage rather than infer it from an assertion identifier.
 
 ## 2. Three clocks and precision are mandatory
 
