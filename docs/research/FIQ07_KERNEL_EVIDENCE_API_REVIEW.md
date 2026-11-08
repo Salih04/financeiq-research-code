@@ -47,6 +47,31 @@ intraday precision cannot establish same-day event order or the U1 formation
 instant. Source evidence publicly available only *at* F is not silently
 treated as admissible if the adopted U1 rule requires it to precede F.
 
+### No implicit latest watermark or mixed settlement lineage
+
+KER-09's *internal* persisted membership functions currently accept an omitted
+`system_as_of` and then use an accepted latest settlement watermark. That is a
+convenience for an internal query, **not a deterministic FinanceIQ exchange
+contract**. A future consumer must supply a nonempty, explicit, version-pinned
+`system_as_of` on every request, record the returned accepted cutoff, and
+verify its relation to the requested cutoff before any result can be used.
+Do not construct a research cohort by combining individually valid answers
+queried at different implicit/latest watermarks.
+
+If an approved projection ever combines KER-09 membership, KER-10 identity
+and another source-channel comparison, it must bind them to a **verified
+consistent settled state**. Merely choosing the numerically earliest of
+multiple system timestamps is not proof that independent recording histories
+share a comparable commit authority. Where shared lineage, durability or
+cross-schema settlement comparability is unproved, return an explicit
+unavailable/refusal outcome rather than merging the apparent answers.
+The exact alignment and proof mechanism is **UNSET** for owner/Kernel review.
+
+A future synthetic acceptance criterion (NOT a fixture or test introduced
+here) is that a request with missing implicit system cutoff, mixed cutoffs,
+unsettled authority or unverifiable cross-history comparability is rejected,
+even when the source membership responses otherwise appear consistent.
+
 ## 3. Proposed failure and release boundaries
 
 These are **review requirements, not implemented response enums**:
