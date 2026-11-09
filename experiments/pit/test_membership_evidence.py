@@ -115,8 +115,11 @@ class MembershipEvidenceSyntheticTest(unittest.TestCase):
                 self.request)
 
     def test_identity_conflict_blocks_affected_member_only(self):
-        raw = self.changed(lambda x: x["identities"][0].__setitem__(
-            "status", "CONFLICT"))
+        def contradictory_binding(item):
+            item["status"] = "CONFLICT"
+            item["known_at_upper"] = None
+            item["identity_proof_sha256"] = None
+        raw = self.changed(lambda x: contradictory_binding(x["identities"][0]))
         doc = _validate(raw, self.request)
         self.assertEqual(doc["identities"][0]["status"], "CONFLICT")
         other = self.doc["memberships"][1]

@@ -726,9 +726,9 @@
       "sha256": "4df17b6763e624e06b3d12981ddb47f9126e2c70a3eee870367e695d36085e6a"
     },
     {
-      "bytes": 7554,
+      "bytes": 7702,
       "path": "experiments/pit/test_membership_evidence.py",
-      "sha256": "ea812289e204b22adfb893c3084962487f6176b15b7f3a1f6389ff135db1eb40"
+      "sha256": "437d10e47d91b1f8afc9a1ed70566b9ca9af936fb030ab9aa434a1458fa8d280"
     },
     {
       "bytes": 8842,
