@@ -21,8 +21,9 @@ No Docker build configuration or image is published.
 ## Verification
 
 Run `python -B scripts/public_safe_tests.py` after installing
-`requirements-public.txt`. It executes exactly 16 PIT consumer and 21 research-core
-synthetic tests, fails on missing tests or skips, and checks the explicit file list.
+`requirements-public.txt`. It executes exactly 16 PIT consumer, 21 research-core and 15 new FIQ-07
+membership-evidence invented synthetic tests; missing tests/skips and explicit
+file-list drift fail closed.
 It does not execute legacy pipelines, acquire data, query SQL or touch holdouts.
 See [test accounting](docs/TEST_ACCOUNTING.md) for the private suite boundaries.
 
@@ -34,7 +35,13 @@ See [test accounting](docs/TEST_ACCOUNTING.md) for the private suite boundaries.
 - [Paper 2 design](docs/paper2/DESIGN.md) and [unregistered OSF draft](docs/paper2/OSF_PREREGISTRATION_DRAFT.md).
 - [Paper 3 candidate design](docs/paper3/DESIGN_CARD.md).
 
-No adoption, registration, holdout access or experiment permission is created by
+The 2026-11-09 owner decision authorizes only contract design and invented
+synthetic-only development of the read-only, one-way membership-evidence 1.0.0
+consumer. Real delivery remains owner-private/local and depends on a merged
+Kernel adapter, current rights and loaded development-window bundles. No
+protected row access, study registration or experiments are authorized here.
+
+No registration, holdout access or experiment permission is created by
 this export. Historical membership must not be reconstructed from current lists;
 the capstone cohort is not the research universe. Missing stored values stay null.
 All trials, including failures and abandonment, must be recorded. Outcomes never
