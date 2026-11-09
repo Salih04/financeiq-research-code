@@ -139,5 +139,23 @@ class MembershipEvidenceSyntheticTest(unittest.TestCase):
                 "source_doc_digest", None)), self.request)
 
 
+    def test_unrecorded_announcement_search_refuses(self):
+        with self.assertRaises(EvidenceRejected):
+            _validate(self.changed(
+                lambda x: x["source_check"]["announcement_search"].__setitem__(
+                    "recorded", False)), self.request)
+
+    def test_late_ker10_identity_adjudication_refuses(self):
+        with self.assertRaises(EvidenceRejected):
+            _validate(self.changed(
+                lambda x: x["identities"][0].__setitem__(
+                    "known_at_upper", "2022-09-30T20:00:00Z")), self.request)
+
+    def test_nonhashable_assertion_ids_refuse_as_contract_error(self):
+        with self.assertRaises(EvidenceRejected):
+            _validate(self.changed(
+                lambda x: x["memberships"][0].__setitem__(
+                    "assertion_ids", [{"malformed": "synthetic"}])), self.request)
+
 if __name__ == "__main__":
     unittest.main()

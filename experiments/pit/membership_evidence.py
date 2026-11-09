@@ -27,12 +27,13 @@ VERSION = "1.0.0"
 LABEL = "SAME_PUBLISHER"
 MAX_BYTES = 262144
 # Pinned exact invented fixture bytes; intentionally *no* real source adapter.
-APPROVED_SYNTHETIC_BYTES = frozenset({"851a6b493eecd561793024e66c1f9f0f28d3bc0078c54f223f168857d9c8f443"})
+APPROVED_SYNTHETIC_BYTES = frozenset({"f66949afb64944f4b2b31a2adb334c337535bd1939ba0ffce4a338c5dad4d7dc"})
 _QUERY = frozenset({"formation_date", "formation_instant", "effective_date",
                     "as_of", "system_as_of"})
 _ROW = frozenset({"member_kind", "member_id", "status", "assertion_ids",
                   "known_at_upper", "source_doc_digest", "chain_digest"})
 _ID = frozenset({"member_kind", "member_id", "status", "effective_date",
+                 "known_at_upper", "identity_proof_sha256", "mapping_proof_sha256",
                  "security_id", "issuer_id", "cross_period_equivalence"})
 _STAMP = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\.[0-9]{1,6})?Z\Z")
 _DAY = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}\Z")
@@ -149,7 +150,10 @@ def _validate(raw, request):
     quarter = str(formation.year) + "Q" + str((formation.month - 1) // 3 + 1)
     for name in ("workbook", "announcement_search"):
         proof = source[name]
-        _fields(proof, {"status", "period", "known_at_upper", "proof_sha256"}, name)
+        _fields(proof, {"status", "period", "known_at_upper", "proof_sha256"} |
+                ({"recorded"} if name == "announcement_search" else set()), name)
+        if name == "announcement_search" and proof["recorded"] is not True:
+            raise EvidenceRejected("documented announcement search required")
         if proof["status"] != "EVIDENCED" or proof["period"] != quarter:
             raise EvidenceRejected("incomplete U1 channel/period evidence")
         _hash(proof["proof_sha256"])
@@ -171,9 +175,19 @@ def _validate(raw, request):
                 or identity["status"] not in ("BOUND", "UNKNOWN", "CONFLICT")
                 or _date(identity["effective_date"]) != effective):
             raise EvidenceRejected("invalid effective-date listing identity")
+        if identity["status"] == "BOUND":
+            _hash(identity["identity_proof_sha256"])
+            if (_time(identity["known_at_upper"]) > asof or
+                    _time(identity["known_at_upper"]) >= ftime):
+                raise EvidenceRejected("identity not public before formation")
+        elif (identity["known_at_upper"] is not None or
+              identity["identity_proof_sha256"] is not None):
+            raise EvidenceRejected("unresolved identity cannot claim binding")
         for field in ("security_id", "issuer_id", "cross_period_equivalence"):
             if identity[field] is not None:
                 _synthetic_id(identity[field])
+        if identity["mapping_proof_sha256"] is not None:
+            _hash(identity["mapping_proof_sha256"])
         by_identity[identity["member_id"]] = identity
     by_member, assertions = {}, set()
     for row in memberships:
@@ -184,10 +198,13 @@ def _validate(raw, request):
         if row["member_id"] in by_member:
             raise EvidenceRejected("duplicate membership")
         ids = row["assertion_ids"]
-        if type(ids) is not list or len(ids) != len(set(ids)):
-            raise EvidenceRejected("duplicate or malformed assertions")
+        if type(ids) is not list:
+            raise EvidenceRejected("malformed assertions")
         for aid in ids:
             _synthetic_id(aid)
+        if len(ids) != len(set(ids)):
+            raise EvidenceRejected("duplicate assertions")
+        for aid in ids:
             if aid in assertions:
                 raise EvidenceRejected("assertion reused by different members")
             assertions.add(aid)
@@ -248,7 +265,10 @@ class SyntheticMembershipEvidence:
             raise EvidenceRejected("unsupported dependent join")
         if self.status(member_id) != "MEMBER":
             return "UNAVAILABLE"
-        return self._identities[member_id][field] or "UNAVAILABLE"
+        identity = self._identities[member_id]
+        if identity["mapping_proof_sha256"] is None:
+            return "UNAVAILABLE"
+        return identity[field] or "UNAVAILABLE"
 
 
 def open_synthetic_bundle(raw: bytes, request: dict) -> SyntheticMembershipEvidence:

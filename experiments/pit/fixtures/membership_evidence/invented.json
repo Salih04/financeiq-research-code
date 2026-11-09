@@ -27,7 +27,8 @@
       "status": "EVIDENCED",
       "period": "2022Q4",
       "known_at_upper": "2022-09-30T18:30:00Z",
-      "proof_sha256": "1001af3890ea4172c6ba9fefe5a210c9f9b67a6aee9a5eaf11ed7bc183c3540f"
+      "proof_sha256": "1001af3890ea4172c6ba9fefe5a210c9f9b67a6aee9a5eaf11ed7bc183c3540f",
+      "recorded": true
     }
   },
   "identities": [
@@ -38,7 +39,10 @@
       "effective_date": "2022-10-01",
       "security_id": null,
       "issuer_id": null,
-      "cross_period_equivalence": null
+      "cross_period_equivalence": null,
+      "known_at_upper": "2022-09-30T17:00:00Z",
+      "identity_proof_sha256": "74414a3843e4816090c96693b209b2e407964db121f4cc1e77c09c4f9bc4e168",
+      "mapping_proof_sha256": null
     },
     {
       "member_kind": "LISTING",
@@ -47,7 +51,10 @@
       "effective_date": "2022-10-01",
       "security_id": "SYN-SECURITY-BETA",
       "issuer_id": "SYN-ISSUER-BETA",
-      "cross_period_equivalence": null
+      "cross_period_equivalence": null,
+      "known_at_upper": "2022-09-30T17:00:00Z",
+      "identity_proof_sha256": "2c1954441f4ee6a14d36eda3e89550c50ea2e7c1d99f973f79c8219920b67c9c",
+      "mapping_proof_sha256": "443300dbeb9975a0eec1e7d45feaa773e46c457429d1f871b9929985ef9e9838"
     },
     {
       "member_kind": "LISTING",
@@ -56,7 +63,10 @@
       "effective_date": "2022-10-01",
       "security_id": null,
       "issuer_id": null,
-      "cross_period_equivalence": null
+      "cross_period_equivalence": null,
+      "known_at_upper": null,
+      "identity_proof_sha256": null,
+      "mapping_proof_sha256": null
     }
   ],
   "memberships": [
@@ -92,5 +102,5 @@
       "chain_digest": null
     }
   ],
-  "content_hash": "34875f74f7b24a24f359fd53832da39a25e157d470f4c3d41b293a3f5b413095"
+  "content_hash": "5ca551674a04b01e4b3c44baa117d0a488614aed85dc131a66b26dd240c7ceb6"
 }
