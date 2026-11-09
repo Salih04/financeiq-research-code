@@ -1,7 +1,34 @@
 # FIQ-07 — source-evidence API fit and contract-review gates
 
-**Status: PROPOSED TECHNICAL REVIEW ONLY — NOT AN ADOPTED EXCHANGE SCHEMA,
-SOURCE-RIGHTS DECISION, UNIVERSE BUILD OR EXECUTION AUTHORIZATION.**
+**Status: OWNER-AUTHORIZED DESIGN AND SYNTHETIC IMPLEMENTATION — REAL-DATA AND HOLDOUT GATED.**
+
+## Controlling owner decisions — 2026-11-09 (C1–C5)
+
+**AUTHORIZED:** design and synthetic-only public consumer implementation of
+`membership-evidence 1.0.0`, **read-only and one-way Kernel→FinanceIQ**.
+The filing-fact `4.0.0` contract and its six pinned E-1 synthetic envelopes
+are unchanged. The earlier Kernel [Issue #28 feasibility answer](https://github.com/Salih04/financeiq-pit-kernel/issues/28)
+was nonbinding and predates this owner authorization. The older 2026-11-08
+proposal below is preserved as dated evidence; where its `UNSET`, no-synthetic
+authorization or independent-source requirements conflict, **this decision
+controls prospectively**.
+
+| Gate | Owner disposition |
+| --- | --- |
+| **C1 — canonical U1 identity** | KER-10 **`BOUND` `LISTING` at effective date**. Issuer/security and cross-period equivalence are nullable; only a join needing an unresolved mapping fails. No literal-code matching outside KER-10 mappings. Absent evidence = `UNAVAILABLE`, never `NOT_MEMBER`. No new source membership engine. |
+| **C2 — time and integrity** | Explicit `as_of`, `system_as_of`, effective-time coordinate, pinned request/content digests and verified settled authority are mandatory; reject implicit/latest, missing, ambiguous, unsettled or incomparable recording authority. |
+| **C3 — completeness and comparison** | Adopt U1 v2.0.0's first-party **3184 workbook + recorded announcement search** completeness rule. Independent-source validation is **NOT required for FIQ-07**. Label any comparison `SAME_PUBLISHER` and call it a **consistency check**, never independent validation. Kernel **G07 independent-ancestry** comparison is not passed and is not a FIQ-07 gate. Paper 2 **G07 rate-priority** is a different gate, unchanged. Missing in-scope evidence stays `UNAVAILABLE`. |
+| **C4 — private recipient** | Any *later authorized* real delivery is only to the **owner's private local environment** as a vault file bundle with verified hashes. Public Git and CI hold **consumer code and invented synthetic fixtures only**. No owner-local rows or counts in Git, CI or chat. Aggregates may appear **only in a paper** after its study-specific gates. Exact current source/operation/recipient rights and retention are still separately required; no real export now. |
+| **C5 — research boundary** | FinanceIQ alone applies U1 2.0.0. Formation dates **through 2022-12-31:** `ROWS` access class, subject to rights, a merged Kernel adapter and loaded private development files. **2023-01-01 through 2025-12-31:** `COUNTS_ONLY`, restricted to the four OD-1=B aggregates until registered opening. The protected-window pilot is **not** the FIQ-07 row test; use a development-window quarter. No holdout opening or real experiment permission. |
+
+**Execution sequence:** this PR is **docs-only**, owner directs ready + merge
+without an additional review round. Then create a separate public,
+synthetic-only consumer implementation and independently check the expanded
+synthetic suite. Actual source transfer stays closed until the Kernel adapter
+is merged, the rights-cleared vault bundle is loaded locally, and applicable
+science/research gates are satisfied. Do not backdate adoption.
+
+---
 
 Review date: 2026-11-08 (Europe/Zurich). FinanceIQ's governing
 [Research Charter](../process/RESEARCH_CHARTER.md),
@@ -109,24 +136,12 @@ These are **review requirements, not implemented response enums**:
   strata. Neither Kernel nor a successful consistency check chooses a
   research universe, target, threshold, result or trial.
 
-## 4. Minimum owner / Kernel decisions before implementing an adapter
+## 4. Current status
 
-| Gate | Present disposition | Required decision or evidence |
-| --- | --- | --- |
-| **C1. Projection** | **NOT APPROVED** | Review whether an additional, independently versioned **read-only source-evidence envelope** may be designed over existing KER-09/10 selectors, without amending `4.0.0` or exposing raw internal records |
-| **C2. Identities/time** | **UNSET** | Approve type system, source lineage and official-period precision, binding of publication and settled commit authority, and which error distinctions survive the projection |
-| **C3. Completeness** | **UNVERIFIED** | Demonstrate authorized source-channel coverage and revision/search provenance, plus distinct independent corroboration if required; same-publisher agreement is insufficient |
-| **C4. Rights/transport** | **CLOSED** | Confirm exact source/product/recipient, permitted operations, field allowlist, retention, authentication, destination and publishability of any aggregate; enforce latest applicable rights decision |
-| **C5. Science** | **BLOCKED** | Separate owner decisions for U2, G03/KAP evidence and feasibility; per-study registration, exposure ledger and protected-period access remain closed |
-
-**Suggested authorization sequence:** First approve **contract design and
-independent review only**; then review a separate synthetic-only public
-consumer proposal *if* exact projection and allowable test fixtures are
-approved. No new public fixtures or CI tests are authorized by this note;
-the existing **16 PIT + 21 research-core** suite remains unchanged. Any
-derived public fixture requires FO-4 review. Only separately authorized,
-rights-cleared private data work could later test a consumer against real
-sources, and that still would not create scientific or holdout authority.
-
-Do not infer adoption of unresolved internal Kernel governance from a merged
-software implementation. No historic decision or trial record is overwritten.
+The controlling 2026-11-09 owner decisions above authorize the new synthetic
+consumer; their implementation does not require independent-source G07 for
+FIQ-07, inferred issuer IDs, access to protected rows, or a new membership
+engine. The older review table and unapproved design suggestions were
+superseded; unresolved **real-data rights, Kernel adapter and private bundle**
+gates remain. Neither a successful consistency check nor this documentation
+constitutes scientific validity.

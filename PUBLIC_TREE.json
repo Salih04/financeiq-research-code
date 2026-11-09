@@ -601,14 +601,14 @@
       "sha256": "e2516099ebcdaa881d8243ef13f5a8f42c1efbf4330aa9f7e50604f64dca7347"
     },
     {
-      "bytes": 12186,
+      "bytes": 13698,
       "path": "docs/research/FIQ07_KERNEL_CONSUMER_REQUIREMENTS.md",
-      "sha256": "e4882c0e18d67861780d0863b2401b1dfdd183b3b6e06d711b16e648a960c007"
+      "sha256": "4803aeeade85bb28f97c1d44a5a6a2ee0ccca33fe09dbfded1eb00ae9427a0e8"
     },
     {
-      "bytes": 9967,
+      "bytes": 11640,
       "path": "docs/research/FIQ07_KERNEL_EVIDENCE_API_REVIEW.md",
-      "sha256": "cba0ef9a3459c31086beed2a54560aa4bff471f5a04f8c2314a0250e86846f3c"
+      "sha256": "a4824d6ef670de9d38531faf0938cf18c0bf6b90c92bad04bd0c55959cf064fe"
     },
     {
       "bytes": 11022,

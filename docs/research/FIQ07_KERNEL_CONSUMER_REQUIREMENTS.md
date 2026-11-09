@@ -1,6 +1,28 @@
 # FIQ-07 - outcome-free PIT Kernel consumer requirements (PROPOSED)
 
-Status: **CONTRACT REQUEST ONLY / NOT APPROVED / NO EXECUTION AUTHORITY**.
+**Controlling 2026-11-09 owner authorization:** See the C1–C5 table in
+[FIQ07_KERNEL_EVIDENCE_API_REVIEW.md](FIQ07_KERNEL_EVIDENCE_API_REVIEW.md).
+Design and invented synthetic implementation of `membership-evidence 1.0.0`
+are **AUTHORIZED**; no actual Kernel export or real-input access yet.
+KER-10 `BOUND` `LISTING` at effective date is sufficient for U1 membership
+validation; security/issuer and cross-period mappings are nullable and only
+dependent joins fail. Explicit `as_of`/`system_as_of`, settled authority and
+digests are mandatory. Absent evidence is `UNAVAILABLE`, never `NOT_MEMBER`.
+FIQ-07 completeness uses 3184 workbook + recorded announcement search with
+`SAME_PUBLISHER` **consistency check**, not independent validation; Kernel
+G07 independent ancestry is not a FIQ-07 gate (Paper 2 G07 rate priority is
+distinct). Public Git/CI contain only code and invented synthetic fixtures;
+the only later real recipient is owner-private local vault hash-bundle after
+rights and adapter gates. No owner-local rows/counts in Git/CI/chat; publish
+aggregates only in papers after study gates. Through 2022-12-31 formations
+`ROWS` are permitted only after real gates; 2023–2025 formations are
+`COUNTS_ONLY` for four OD-1=B aggregates pending registered opening.
+A protected-window pilot is not a row test. Older proposal below remains
+dated historical text and **is superseded if inconsistent**.
+
+---
+
+Status: **HISTORICAL 2026-11-07 PROPOSAL / SUPERSEDED WHERE INCONSISTENT**.
 Date: 2026-11-07 (Europe/Zurich). Research support, not investment advice.
 
 This is FinanceIQ's minimum *consumer-side* request for a separately reviewed,
@@ -51,7 +73,7 @@ contract requirements, **not** evidence that an exporter already provides them.
 | 3184 workbook block | In-document year/quarter label, source copy ID/content hash, original narrowest-tier code and source share/security code, parsing quality | Quarter binding and the approved XU030/XU050/XU100 tier interpretation |
 | First-party public copy | Source kind, document ID, content hash, publication lower/upper bounds, retrieval time and ordered-copy lineage | Enforce strictly pre-F availability and B2/22-B compatible copy chronology |
 | Channel completeness | Scope, retention limits, workbook coverage, documented BIST archive query/date/result count/pagination/caps and found-copy reconciliation | Fail closed when required source-channel completeness or negative search is unproved |
-| Identity mapping | Source security/share code, stable security and issuer IDs, evidence ID, effective-valid interval, equivalence version and collision flags | Apply adopted 21-A effective-dated identity equivalence without present-day inference |
+| Identity mapping | KER-10 BOUND LISTING at effective date; nullable security/issuer and cross-period mapping with evidence and collision flags | U1 formation validation requires BOUND LISTING, and only dependent security/issuer joins fail when unavailable; no literal-code inference |
 | Membership collection and assertion | Collection definition, member kind (listing/security/entity or reviewed equivalent), effective local civil interval and zone, typed member identity, source version/chain, public-knowledge bound, settled system-time authority, and explicit positive/negative/withdrawn evidence | Preserve source assertions and uncertainty without deriving a research universe or inferring a missing roster row as negative evidence |
 | BIST review or change event | Official ADD/REMOVE/other applicable action, public bounds, effective time, member/reserve role, ordering and evidence of integration in the periodic table | Apply M5/M6, same-day IN0/OUT0 and conditional predecessor M7 |
 | KAP statement template | Versioned first-party template category/effective interval, documented identity binding and holdings-class evidence or null | Classify G03 bank/insurance/standard TFRS; preserve unknown holdings/null |
@@ -137,10 +159,11 @@ These are test descriptions, not created fixtures or new CI tests:
   unknown/late `known_at_upper` is rejected. The existing six E-1 synthetic
   envelopes remain accepted only for their current purpose.
 
-No synthetic fixture, test suite, approved test count or CI allowlist is
-changed by this request; public PIT 16 and research-core 21 remain the approved
-boundaries. A separate review must authorize any future fixtures/tests. Derived
-public fixtures additionally require FO-4 and publication clearance.
+The **historical proposal** added no synthetic test. The owner on 2026-11-09
+authorized **invented synthetic-only** consumer tests for the new contract.
+Report new suite counts transparently without reducing baseline PIT 16 and
+research-core 21. Any *derived from private source* public fixture still
+requires FO-4 and publication clearance; none is approved here.
 
 ## Decisions and evidence still required
 
