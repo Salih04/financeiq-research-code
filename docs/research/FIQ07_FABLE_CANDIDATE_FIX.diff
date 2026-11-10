@@ -1,0 +1,25 @@
+diff --git a/experiments/pit/kernel_membership_bundle.py b/experiments/pit/kernel_membership_bundle.py
+--- a/experiments/pit/kernel_membership_bundle.py
++++ b/experiments/pit/kernel_membership_bundle.py
+@@ -146,2 +146,3 @@
+     available = set()
++    assertion_owners = {}  # candidate; requires global ID namespace
+     for q, part in zip(quarters, e["quarters"]):
+@@ -169,3 +170,8 @@
+             archive = part["archive_search"]
+-            _date(archive["search_date"])
++            search_day = _date(archive["search_date"])
++            # Conservative candidate bound; same-day civil time remains UNSET.
++            settled_day = _time(coords[q]["system_as_of"]).astimezone(
++                ZoneInfo("Europe/Istanbul")).date()
++            if search_day > settled_day:
++                _deny()
+             _syn(archive["query"])
+@@ -216,2 +222,7 @@
+                     assertion_ids.add(aid)
++                    # Candidate cross-quarter listing identity binding.
++                    owner = (row["member_kind"], row["member_id"])
++                    if aid in assertion_owners and assertion_owners[aid] != owner:
++                        _deny()
++                    assertion_owners[aid] = owner
+                 if _time(row["known_at_upper"]) > _time(coords[q]["as_of"]):
