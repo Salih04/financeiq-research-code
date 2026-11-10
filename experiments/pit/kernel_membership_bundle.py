@@ -8,6 +8,8 @@ import hashlib
 import hmac
 import json
 import re
+from datetime import datetime, time, timezone
+from zoneinfo import ZoneInfo
 
 from .membership_evidence import EvidenceRejected, _json, _hash, _time, _date, _synthetic_id
 
@@ -91,6 +93,13 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
     for q, coord in zip(quarters, request["coordinates"]):
         _exact(coord, _COORD)
         day = _date(coord["effective_date"])
+        # CIVIL_DATE has no independently proven intraday formation instant.
+        # Reject knowledge at/after the earliest Istanbul-day boundary;
+        # admitting same-day information requires a separate evidenced F.
+        day_start = datetime.combine(
+            day, time.min, tzinfo=ZoneInfo("Europe/Istanbul")).astimezone(timezone.utc)
+        if _time(coord["as_of"]) >= day_start:
+            _deny()
         if (coord["quarter"] != q or coord["effective_precision"] != "CIVIL_DATE"
                 or day.year != int(q[:4]) or (day.month - 1) // 3 + 1 != int(q[-1])
                 or _time(coord["as_of"]) >= _time(coord["system_as_of"])):
@@ -161,6 +170,10 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
         if any(type(counts["tier_narrowest"][tier]) is not int
                or counts["tier_narrowest"][tier] != count
                for tier, count in _TIERS.items()):
+            _deny()
+        # Source-tier membership arithmetic is a cross-mode invariant.
+        # An externally pinned digest does not establish logical consistency.
+        if counts["MEMBER"] != sum(counts["tier_narrowest"].values()):
             _deny()
         if request["mode"] == "ROWS":
             rows = part["rows"]
