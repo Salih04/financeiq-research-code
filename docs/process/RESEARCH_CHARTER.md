@@ -189,6 +189,7 @@ New:
 | Paper 1 — audit | How much do two look-aheads inflate an ML-for-finance evaluation in an emerging market: publication timing (measured by the point-in-time audit) and cohort selection (measured by re-running the frozen capstone design on U1, specification committed before the run)? | Draft can start; selection measurement waits for U1 data |
 | Paper 2 — disclosure event study | How do prices react to KAP financial-statement disclosures relative to a pre-specified earnings surprise, and how much of a firm's move is attributable to market, rates, FX and flow factors versus firm-specific news? Did the IAS 29 transition change the relation? | Design, then pre-registration on OSF |
 | Study 3 — open modeling | On the U1 quarterly point-in-time panel, does any model family carry out-of-sample information about pre-specified targets after multiplicity adjustment? | Exploration in the development window, then a confirmatory pre-registration |
+| Study 4 — LLM agent forward test | Does the daily score of a widely used open-source LLM stock-research agent carry out-of-sample information about BIST excess returns, measured forward from a configuration frozen before logging starts? | Owner-approved candidate (2026-11-10): [design card](../study4/DESIGN_CARD.md) and [draft pre-registration](../study4/OSF_PREREGISTRATION_DRAFT.md); not registered |
 | Later | Fund-flow pressure; sponsor or bank data; CDS and credit spreads | Deferred |
 
 ## 7. What this charter does not change
