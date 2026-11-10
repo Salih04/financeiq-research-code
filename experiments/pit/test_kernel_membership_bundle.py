@@ -42,16 +42,19 @@ def invented():
         settlement=dict(checkpoint_ref="SYN-CHECKPOINT",
             accepted_cutoff="2022-10-10T00:00:00Z",
             proof_kind="SYNTHETIC_NOT_TRUSTED"))
+    lineage = {q: ["SYN-ARCHIVE-ROOT", "SYN-WORKBOOK-ROOT"]}
     digest = hashlib.sha256(canonical(request)).hexdigest()
     payload = dict(contract="membership-evidence", version="1.0.0",
         basis="SYNTHETIC_ONLY", independent_source="SAME_PUBLISHER",
-        mode="ROWS", owner_quarters=[q], request_sha256=digest, quarters=[part])
+        mode="ROWS", owner_quarters=[q], request_sha256=digest,
+        source_lineage_sha256=hashlib.sha256(canonical(lineage)).hexdigest(),
+        quarters=[part])
     manifest = dict(contract="membership-evidence", version="1.0.0",
         hash_algorithm="sha256", recipient="SYNTHETIC_TEST_ONLY",
         path="membership-evidence.json",
         payload_sha256=hashlib.sha256(canonical(payload)).hexdigest(),
         payload_bytes=len(canonical(payload)), request_sha256=digest,
-        source_lineage={q: ["SYN-ARCHIVE-ROOT", "SYN-WORKBOOK-ROOT"]})
+        source_lineage=lineage)
     return request, manifest, payload
 
 
@@ -132,11 +135,27 @@ class KernelDevelopmentWireTests(unittest.TestCase):
         manifest["payload_bytes"] = len(canonical(payload))
         self.assertEqual(read(req, manifest, payload)["quarters"][0]["status"], "EVIDENCED")
 
+    def test_lineage_digest_is_bound_to_canonical_manifest_roots(self):
+        req, manifest, payload = invented()
+        self.assertEqual(payload["source_lineage_sha256"],
+                         hashlib.sha256(canonical(manifest["source_lineage"])).hexdigest())
+        altered = copy.deepcopy(manifest)
+        altered["source_lineage"]["2022Q4"] = ["SYN-OTHER-ROOT", "SYN-WORKBOOK-ROOT"]
+        with self.assertRaises(EvidenceRejected):
+            read(req, altered, payload)
+        req, manifest, payload = invented()
+        payload["source_lineage_sha256"] = "0" * 64
+        manifest["payload_sha256"] = hashlib.sha256(canonical(payload)).hexdigest()
+        manifest["payload_bytes"] = len(canonical(payload))
+        with self.assertRaises(EvidenceRejected):
+            read(req, manifest, payload)
+
     def test_unavailable_is_null_not_negative(self):
         req, manifest, payload = invented()
         payload["quarters"] = [dict(quarter="2022Q4", status="UNAVAILABLE",
                                    rows=None, counts=None)]
         manifest["source_lineage"] = {}
+        payload["source_lineage_sha256"] = hashlib.sha256(canonical({})).hexdigest()
         manifest["payload_sha256"] = hashlib.sha256(canonical(payload)).hexdigest()
         manifest["payload_bytes"] = len(canonical(payload))
         row = read(req, manifest, payload)["quarters"][0]

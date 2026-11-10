@@ -22,7 +22,7 @@ No Docker build configuration or image is published.
 
 Run `python -B scripts/public_safe_tests.py` after installing
 `requirements-public.txt`. It executes exactly 16 PIT consumer, 21 research-core and 18 new FIQ-07
-membership-evidence invented synthetic tests, plus 7 development-window
+membership-evidence invented synthetic tests, plus 8 development-window
 manifest/payload wire-shape checks; missing tests/skips and explicit
 file-list drift fail closed.
 It does not execute legacy pipelines, acquire data, query SQL or touch holdouts.

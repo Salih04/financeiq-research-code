@@ -53,7 +53,7 @@ def main():
         ('pit-synthetic', loader.loadTestsFromName('experiments.pit.test_kernel_snapshot'), 16),
         ('research-core-synthetic', loader.discover(str(ROOT / 'experiments/research_core/tests'), pattern='test_*.py'), 21),
         ('membership-evidence-synthetic', loader.loadTestsFromName('experiments.pit.test_membership_evidence'), 18),
-        ('membership-wire-dev-synthetic', loader.loadTestsFromName('experiments.pit.test_kernel_membership_bundle'), 7),
+        ('membership-wire-dev-synthetic', loader.loadTestsFromName('experiments.pit.test_kernel_membership_bundle'), 8),
     ]
     rows = []
     ok = True

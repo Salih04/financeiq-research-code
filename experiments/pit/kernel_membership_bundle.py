@@ -20,7 +20,7 @@ _COORD = {"quarter", "effective_date", "effective_precision", "as_of", "system_a
 _MANIFEST = {"contract", "version", "hash_algorithm", "recipient", "path", "payload_sha256",
              "payload_bytes", "request_sha256", "source_lineage"}
 _PAYLOAD = {"contract", "version", "basis", "independent_source", "mode",
-            "owner_quarters", "request_sha256", "quarters"}
+            "owner_quarters", "request_sha256", "source_lineage_sha256", "quarters"}
 _ROW = {"source_code", "tier_cell", "tier", "source_evidence_id", "member_kind",
         "member_id", "security_id", "issuer_id", "identity", "status",
         "known_at_upper", "assertion_ids"}
@@ -111,6 +111,7 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
     for key in ("payload_sha256", "request_sha256"):
         _hash(m[key])
     _hash(e["request_sha256"])
+    _hash(e["source_lineage_sha256"])
     if (m["contract"] != "membership-evidence" or m["version"] != "1.0.0"
             or m["hash_algorithm"] != "sha256"
             or m["recipient"] != "SYNTHETIC_TEST_ONLY"
@@ -125,6 +126,7 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
             or e["mode"] != request["mode"]
             or e["owner_quarters"] != quarters
             or e["request_sha256"] != _digest(request)
+            or e["source_lineage_sha256"] != _digest(m["source_lineage"])
             or manifest != _canonical(m) or payload != _canonical(e)
             or type(e["quarters"]) is not list or len(e["quarters"]) != len(quarters)
             or type(m["source_lineage"]) is not dict):
