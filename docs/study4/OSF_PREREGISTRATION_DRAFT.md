@@ -1,6 +1,6 @@
 # OSF preregistration draft — Study 4
 
-**v0.1 · 2026-11-10 · DRAFT · NOT REGISTERED**
+**v0.2 · 2026-11-10 · DRAFT · NOT REGISTERED** (v0.2 resolves review findings B1–B4 on PR #8)
 
 Research support only; not investment advice. **NOT SUBMITTED.** Registration
 identifier, URL, DOI and effective timestamp are **UNSET**. This is the
@@ -11,7 +11,7 @@ registration. Fields marked **UNSET** are fixed at freeze, before registration.
 
 ## BEFORE — proposed registration fields
 
-- **Study ID / version / date:** `study4-llm-agent-forward` / v0.1 draft /
+- **Study ID / version / date:** `study4-llm-agent-forward` / v0.2 draft /
   registration timestamp UNSET.
 - **Authors:** UNSET (owner).
 
@@ -29,11 +29,13 @@ subsequent excess return, out of sample and forward in time?
   - H4: IC > 0 for the information version, close(t)→close(t+5).
   - H5: the top-minus-bottom score-quintile portfolio has positive mean excess
     return net of costs.
-  - H6: the IC difference versus each benchmark (B1, B2) is > 0. B0 (zero) is
-    H1 itself; B1 and B2 enter as one hypothesis using the smaller of the two
-    differences.
-  - H7: “buy” recommendations have a higher mean primary outcome than “sell”
-    recommendations (two-sided).
+  - H6: the agent's IC exceeds **both** B1 and B2. This is an
+    intersection-union test: one paired one-sided test per benchmark, each on
+    the daily series ΔIC = IC_agent − IC_benchmark, with p_H6 = max(p_B1,
+    p_B2). H6 is supported only if both differences are. B0 (zero) is H1
+    itself.
+  - H7: “buy” stock-days have a different mean primary outcome than “sell”
+    stock-days (two-sided).
 
 ### Estimand
 
@@ -44,21 +46,48 @@ subsequent excess return, out of sample and forward in time?
   R(i,t) = TR(i; close t+1 → close t+1+5) − TR(XU100 total-return index;
   same dates).
 - **Summary:** the time-series mean of daily cross-sectional rank ICs.
+  Subtracting one index return per date leaves the ranks unchanged, so the
+  primary IC equals the IC on raw total returns. The excess definition
+  matters for H5 and H7.
 
 ### Universe, data and cutoffs
 
 - **Agent inputs (S4-1):**
   - DSA fetches Yahoo Finance data through its pinned yfinance path;
     paid news search is off.
-  - Inputs are hashed per run; they are part of the treatment and never
-    reported as data.
-- **Logged set:** the BIST 100 list in force at run time, from the latest
-  owner-held DataStore 3184 quarter (S4-2). The owner downloads each new
-  quarter manually; it is never scripted. Rows outside U1 are dropped at the
-  opening.
-- **Outcome data:** daily total returns and the XU100 total-return index from
-  LSEG (primary). DataStore is the cross-check and fallback. Price source,
-  snapshot ID and hash are fixed at opening. Yahoo is never an outcome source.
+  - Inputs are hashed per run, and the raw input payloads are archived
+    privately so post-close revisions can be audited. They are part of the
+    treatment and never reported as data.
+- **Logged set (sealed before each run):** `LoggedSet_t` is the union of:
+  - (a) the codes in the current quarter of the latest owner-held 3184
+    workbook;
+  - (b) the codes in Borsa Istanbul's announced next-period composition,
+    from the announcement date until the period starts;
+  - (c) the codes removed at the last period change, kept for one quarter.
+
+  3184 rights are S4-2 (Kernel PR #36). Downloads and transcription are
+  manual, never scripted. The list, its source references and its hash are
+  written before the run and never edited.
+- **Containment at the opening:** U1 2.0.0 comes from Kernel membership
+  evidence. Each U1 member-day is valid, a **list miss** (not in
+  `LoggedSet_t`) or a **run miss** (logged, no valid score). Misses stay
+  missing. Code renames are resolved through KER-10 `BOUND LISTING`; an
+  unresolved code is a list miss. Non-U1 rows are dropped.
+- **Outcome data (fixed at registration, outcome-blind):**
+  - Primary source: the project's adopted primary daily-price source on the
+    registration date. That is LSEG if obtained by 2026-11-30, otherwise
+    DataStore, per the daily-price source decision.
+  - Exact products: UNSET. For LSEG, a per-stock total-return index and the
+    BIST 100 total-return index. For DataStore, a named daily equity price
+    product plus corporate actions, with returns built by Kernel KER-13c.
+    3184 is membership only and grants no price rights.
+  - Before registration the chosen products need a Kernel rights record, a
+    PIT snapshot design, a share/listing mapping (KER-10), corporate-action
+    and delisting rules, TRY currency and a return formula.
+  - There is no switch after registration and no per-day fallback. A missing
+    primary return stays missing. The other source, if available at the
+    opening, is a pre-registered sensitivity only. Yahoo is never an outcome
+    source.
 - **Cutoffs:**
   - The score for day t may use only information available by the run time
     (20:00 Europe/Istanbul, day t). The run timestamp and input hash are
@@ -80,7 +109,11 @@ fields (score and action) and the mapping of action labels to buy/hold/sell.
 ### Analysis plan
 
 - **Daily IC:** a Spearman correlation across U1 stocks with a valid score and
-  outcome. A day counts only if it has at least 50 such stocks.
+  outcome, with average ranks for ties. A day counts only if it has at least
+  50 such stocks. A day on which either variable has zero cross-sectional
+  variance has an undefined IC; it is excluded from that series, and the
+  number of such days is reported. This matters mostly for the MA(5/20) sign
+  benchmark.
 - **Primary test:** mean IC with a Newey–West HAC standard error, lag 5.
   One-sided α = 0.05. Report the estimate and the 90% and 95% confidence
   intervals.
@@ -92,13 +125,23 @@ fields (score and action) and the mapping of action labels to buy/hold/sell.
     sourced BIST commission-plus-spread estimate before registration).
   - HAC test on the daily series.
 - **Benchmarks:** each is computed from the outcome source using prices
-  through close t, with the same IC method and a HAC test on the daily IC
-  difference.
+  through close t, with the same IC method.
   - B0: zero.
   - B1: 5-day reversal, −r(t−5, t).
   - B2: MA(5/20) trend sign.
-- **Recommendation contrast:** the mean primary outcome of buy minus sell
-  stock-days. The standard error is clustered by date.
+- **H6 mechanics:**
+  - For each of B1 and B2, take the dates on which both the agent IC and that
+    benchmark's IC are defined, and use the daily ΔIC series on that
+    intersection.
+  - Test each series with a one-sided Newey–West HAC t-test, lag 5.
+  - p_H6 = max(p_B1, p_B2), entered once into Holm. This intersection-union
+    test is valid at level α without further adjustment.
+  - Both component estimates and their date counts are reported.
+- **Recommendation contrast (H7):** the mean primary outcome of buy minus
+  sell stock-days, pooled over the window. The standard error is clustered by
+  date. Dates with only one group contribute only to that group's mean. With
+  fewer than 30 buy or 30 sell stock-days in total, H7 is **not estimable**
+  and enters Holm with p = 1.
 - **Multiplicity:** H1 is the single primary test. H2–H7 are one Holm family
   at α = 0.05. Every computed configuration enters the experiment ledger, and
   N is reported.
@@ -107,7 +150,10 @@ fields (score and action) and the mapping of action labels to buy/hold/sell.
     that stock-day out.
   - Delisting and suspension returns follow the adopted price-source rules; a
     missing return stays null and is reported.
-  - Report coverage as valid stock-days divided by planned stock-days.
+  - Coverage denominator: U1 member-days. Report list misses, run misses and
+    missing outcomes separately.
+  - Sensitivity, pre-registered: H1 restricted to stock-quarters with no list
+    or run miss.
 - **Exclusions:** engineering dry-run outputs from before registration;
   nothing else.
 
@@ -116,8 +162,10 @@ fields (score and action) and the mapping of action labels to buy/hold/sell.
 - Logging stops after 12 calendar months; then there is one confirmatory
   opening (OD-2 = B). There are no interim looks, and the only monitoring is
   liveness.
-- If coverage falls below 80%, the study is still analysed but reported as
-  **coverage-compromised**.
+- The study is still analysed but reported as **coverage-compromised** if
+  either condition holds:
+  - list misses exceed 1% of U1 member-days (this is selection, not noise);
+  - valid coverage falls below 80%.
 - Before that, the study ends early only if the agent cannot run for 20
   consecutive trading days. It is then reported as abandoned, with its logs
   sealed and unopened, unless a new registration states otherwise.
@@ -147,11 +195,15 @@ supports investment advice.
 
 ## Required gates before registration
 
+0. Kernel PR #36 (3184 scope) is merged. The outcome source products,
+   Kernel rights record and PIT snapshot design exist (see Outcome data).
 1. Literature check confirms the contribution.
 2. The owner chooses the model, and the system freezes (all UNSET hashes filled).
 3. Simulation-based power replaces the approximation, and a sourced cost
    figure replaces the default.
 4. The engineering dry run passes on format only; its outputs are discarded.
 5. Owner registration on OSF. Logging starts on the next trading day.
+6. Before the opening, not before registration: OD-2/OD-3 cross-study
+   exposure and clean-forward status checks.
 
 ## AFTER — deliberately unfilled
