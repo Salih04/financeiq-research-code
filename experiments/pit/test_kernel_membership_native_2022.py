@@ -8,7 +8,9 @@ import hashlib
 import json
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+from experiments.pit import kernel_membership_bundle as wire
 from experiments.pit.kernel_membership_bundle import open_kernel_wire_synthetic
 from experiments.pit.membership_evidence import EvidenceRejected
 
@@ -38,6 +40,34 @@ def rebound(request, manifest, payload):
     m["payload_bytes"] = len(p_bytes)
     m_bytes = canonical(m)
     return m_bytes, p_bytes, hashlib.sha256(m_bytes).hexdigest()
+
+
+def coherent_reyear(request, manifest, payload, year):
+    """Relabel *all* time/quarter/lineage fields in an invented 2022 fixture.
+
+    Other checks remain satisfiable; a negative 2021 result must be caused
+    solely by the native 2022 profile-year check, not by an unrelated digest,
+    time, row or source-lineage mismatch. The pinned original is never edited.
+    """
+    changed = copy.deepcopy(request)
+    m, p = json.loads(manifest), json.loads(payload)
+    original_quarters = changed["owner_quarters"]
+    mapped = {q: year + q[4:] for q in original_quarters}
+    changed["owner_quarters"] = [mapped[q] for q in original_quarters]
+    for coord in changed["coordinates"]:
+        coord["quarter"] = mapped[coord["quarter"]]
+        coord["effective_date"] = year + coord["effective_date"][4:]
+        coord["as_of"] = year + coord["as_of"][4:]
+    m["source_lineage"] = {mapped[q]: roots for q, roots in m["source_lineage"].items()}
+    p["owner_quarters"] = list(changed["owner_quarters"])
+    for part in p["quarters"]:
+        part["quarter"] = mapped[part["quarter"]]
+        part["archive_search"]["search_date"] = year + part["archive_search"]["search_date"][4:]
+        for row in part["rows"]:
+            if row["known_at_upper"].startswith("2022-"):
+                row["known_at_upper"] = year + row["known_at_upper"][4:]
+    p["source_lineage_sha256"] = hashlib.sha256(canonical(m["source_lineage"])).hexdigest()
+    return changed, *rebound(changed, canonical(m), canonical(p))
 
 
 class KernelNative2022FixtureTests(unittest.TestCase):
@@ -92,15 +122,26 @@ class KernelNative2022FixtureTests(unittest.TestCase):
                     open_kernel_wire_synthetic(m, p, request=changed,
                                                expected_manifest_sha256=pin)
 
-        for year in ("2021", "2023"):
-            with self.subTest(year=year):
-                changed = copy.deepcopy(request)
-                changed["owner_quarters"] = [year + "Q2", year + "Q3"]
-                changed["coordinates"][0].update(
-                    quarter=year + "Q2", effective_date=year + "-05-16")
-                changed["coordinates"][1].update(
-                    quarter=year + "Q3", effective_date=year + "-08-15")
-                m, p, pin = rebound(changed, manifest, payload)
-                with self.assertRaises(EvidenceRejected):
-                    open_kernel_wire_synthetic(m, p, request=changed,
-                                               expected_manifest_sha256=pin)
+        # 2021 lies inside the general <=2022 gate; every digest,
+        # effective clock, publication bound, payload and lineage key agrees.
+        # The dedicated native profile-year check is the ONLY refusal cause.
+        changed, m, p, pin = coherent_reyear(request, manifest, payload, "2021")
+        self.assertFalse(wire._native_profile_year_matches(
+            changed["profile"], changed["owner_quarters"]))
+        with self.assertRaises(EvidenceRejected):
+            open_kernel_wire_synthetic(m, p, request=changed,
+                                       expected_manifest_sha256=pin)
+        # Mutation control: with ONLY that guard bypassed, the very same
+        # coherent 2021 synthetic wire is otherwise accepted end-to-end.
+        with patch.object(wire, "_native_profile_year_matches", return_value=True):
+            result = open_kernel_wire_synthetic(m, p, request=changed,
+                                                expected_manifest_sha256=pin)
+        self.assertEqual(result["owner_quarters"], ["2021Q2", "2021Q3"])
+
+        # Distinct outer boundary: even with native source-year check bypassed,
+        # any 2023 ROWS quarter is refused by the project-wide <=2022 gate.
+        changed, m, p, pin = coherent_reyear(request, manifest, payload, "2023")
+        with patch.object(wire, "_native_profile_year_matches", return_value=True):
+            with self.assertRaises(EvidenceRejected):
+                open_kernel_wire_synthetic(m, p, request=changed,
+                                           expected_manifest_sha256=pin)
