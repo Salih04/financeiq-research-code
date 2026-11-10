@@ -1,8 +1,8 @@
-"""FIQ-07 invented-only wire-format validation for the proposed Kernel bundle.
+"""FIQ-07 invented-only Kernel wire-format validation.
 
-No I/O or production adapter. The Kernel's current 2025 synthetic profile
-cannot produce the separately required development-window ROWS proof.
-Accepting this shape never authorizes real bundles, OD-1 aggregates or U1.
+No I/O or production adapter. Besides in-memory synthetic development shapes,
+this consumer accepts the pinned native-producer 2022 invented fixture profile.
+Neither demonstrates real source access, authorized ROWS, OD-1 aggregates or U1.
 """
 import hashlib
 import hmac
