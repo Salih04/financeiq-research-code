@@ -557,8 +557,8 @@
     },
     {
       "path": "docs/TEST_ACCOUNTING.md",
-      "bytes": 6903,
-      "sha256": "ec7ca03108d0cb1224b0ff7f8e35d866e1a0515bf48dbb882ab77d5d25e7b6b8"
+      "bytes": 6895,
+      "sha256": "77bf22e39935471cf19c806b25f2d77e649b1e774553af1bb56f330437eb26e2"
     },
     {
       "bytes": 1998,
@@ -601,14 +601,19 @@
       "sha256": "e2516099ebcdaa881d8243ef13f5a8f42c1efbf4330aa9f7e50604f64dca7347"
     },
     {
+      "path": "docs/research/FIQ07_F1_F2_OWNER_DECISION_2026-11-10.md",
+      "bytes": 2229,
+      "sha256": "de1e88aac9de8394925198b6472f4291be8443ffd062deba5720b2b638ceda6b"
+    },
+    {
       "path": "docs/research/FIQ07_FABLE_CANDIDATE_FIX.diff",
-      "bytes": 1290,
-      "sha256": "919484d52d4bf0e43835ff85df2972c7c6c9604565d0cfc4d3574206c95b3405"
+      "bytes": 847,
+      "sha256": "9bc92fa100ddcf003984d167a75face6562434c529aa430c9213e52e2b939700"
     },
     {
       "path": "docs/research/FIQ07_FABLE_REPRO_GUIDE.md",
-      "bytes": 1890,
-      "sha256": "3751c76dbeaebc00d08c58509aa6f41e4f90090098594d908c97a0f81306075e"
+      "bytes": 2244,
+      "sha256": "4f0845ccfd1bab5e46e71e9ebbee1c2361b1427e7c4527984db87a1269da8dc5"
     },
     {
       "bytes": 13698,
@@ -717,8 +722,8 @@
     },
     {
       "path": "experiments/pit/kernel_membership_bundle.py",
-      "bytes": 11241,
-      "sha256": "53d07efe30aeac1996e7650c57c2a6dca298fc415bcad9aa4925d52ec34c9ce7"
+      "bytes": 11929,
+      "sha256": "9e9849f4f7d66c4523111e8966f553f9268575a3e682c28f0ea9bbca83bdc4f6"
     },
     {
       "bytes": 14969,
@@ -747,8 +752,8 @@
     },
     {
       "path": "experiments/pit/test_fiq07_fable_exact_module.py",
-      "bytes": 5295,
-      "sha256": "3540dd8f15c670368bf701f83f5b79276f3ba69a9e832a9a946d1f69083f2dad"
+      "bytes": 7274,
+      "sha256": "dcf21501ff45ee77ab586515b8d7152d26f165977e97a6501d40b072ed0caa8a"
     },
     {
       "bytes": 9011,
@@ -1043,7 +1048,7 @@
     {
       "path": "scripts/public_safe_tests.py",
       "bytes": 3396,
-      "sha256": "5022e126cb8fb5f05d33fbe9b0e8c964fd438043469eff40202c23dcb6511646"
+      "sha256": "b9e727434c8eb253bbc9a1461b5fb2f2d0c2de33e47610e801947d54adec2ba7"
     },
     {
       "bytes": 441,
