@@ -58,6 +58,12 @@ def _syn(s):
         _deny()
 
 
+def _native_profile_year_matches(profile, quarters):
+    """Pure source-year constraint; independently mutation-tested with coherent wire."""
+    return (profile not in _NATIVE_DEVELOPMENT_PROFILES
+            or all(q.startswith("2022Q") for q in quarters))
+
+
 def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_sha256):
     """Validate invented development-window manifest/payload structure and hashes.
 
@@ -93,8 +99,7 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
             or len(request["coordinates"]) != len(quarters)):
         _deny()
     # Native source-year profiles may not be relabelled as another year.
-    if (request["profile"] in _NATIVE_DEVELOPMENT_PROFILES
-            and any(not q.startswith("2022Q") for q in quarters)):
+    if not _native_profile_year_matches(request["profile"], quarters):
         _deny()
     coords, cutoffs = {}, set()
     for q, coord in zip(quarters, request["coordinates"]):
