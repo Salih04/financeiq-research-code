@@ -43,9 +43,12 @@ consumer. Real delivery remains owner-private/local and depends on a merged
 Kernel adapter, current rights and loaded development-window bundles. No
 protected row access, study registration or experiments are authorized here.
 
-The development-window wire-shape tests are invented only, not a native Kernel
-round-trip: the current producer still profiles 2025, pending a reviewed
-pre-2023 layout. Its generic protected-period COUNTS_ONLY is not OD-1 clearance.
+The development-window wire-shape tests remain invented in-memory checks.
+After Kernel PR #31 merged, public tests additionally read its byte-exact
+invented 2022Q2-Q3 ROWS fixture from the native producer. This proves fixture
+interoperability, not a live producer run or real source round-trip. Other
+unprofiled years and actual custody remain gated. Generic protected-period
+COUNTS_ONLY is not OD-1 clearance.
 
 No registration, holdout access or experiment permission is created by
 this export. Historical membership must not be reconstructed from current lists;
