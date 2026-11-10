@@ -726,9 +726,9 @@
       "sha256": "6762375f421a3a9ee7d4144a4cd083c99f5238feb799a4d066659b18ef5ec3a2"
     },
     {
-      "bytes": 6493,
+      "bytes": 8001,
       "path": "experiments/pit/test_kernel_membership_bundle.py",
-      "sha256": "b24b1cf549b273d1ad8cdbb875b170e26ea360d4fe0b863df6dd888679089ef5"
+      "sha256": "c5eba5d5c0ddb5f413d5a85b887b5cf6dee1f6228982b58271b26e8f18a632f5"
     },
     {
       "bytes": 16407,
@@ -1008,7 +1008,7 @@
     {
       "bytes": 3144,
       "path": "scripts/public_safe_tests.py",
-      "sha256": "304640dcb274db5f4576dc2bb061f3f843c65200a1ff953780e869077e2d4193"
+      "sha256": "755035a02b3bc271abe226248325e40011613c08759346cc3cf8e421e06470e5"
     },
     {
       "bytes": 441,

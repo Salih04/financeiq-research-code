@@ -62,6 +62,35 @@ def read(request, manifest, payload):
 
 
 class KernelDevelopmentWireTests(unittest.TestCase):
+    def test_as_of_must_precede_unverified_formation_day(self):
+        for cutoff in ("2022-10-02T21:00:00Z", "2022-10-03T12:00:00Z",
+                       "2022-10-09T00:00:00Z"):
+            with self.subTest(cutoff=cutoff):
+                req, manifest, payload = invented()
+                req["coordinates"][0]["as_of"] = cutoff
+                digest = hashlib.sha256(canonical(req)).hexdigest()
+                payload["request_sha256"] = digest
+                manifest["request_sha256"] = digest
+                manifest["payload_sha256"] = hashlib.sha256(canonical(payload)).hexdigest()
+                manifest["payload_bytes"] = len(canonical(payload))
+                with self.assertRaises(EvidenceRejected):
+                    read(req, manifest, payload)
+
+    def test_counts_only_member_total_must_match_source_tiers(self):
+        req, manifest, payload = invented()
+        req["mode"] = "COUNTS_ONLY"
+        payload["mode"] = "COUNTS_ONLY"
+        for key in ("rows", "archive_search", "settlement"):
+            del payload["quarters"][0][key]
+        payload["quarters"][0]["counts"]["MEMBER"] = 0
+        digest = hashlib.sha256(canonical(req)).hexdigest()
+        payload["request_sha256"] = digest
+        manifest["request_sha256"] = digest
+        manifest["payload_sha256"] = hashlib.sha256(canonical(payload)).hexdigest()
+        manifest["payload_bytes"] = len(canonical(payload))
+        with self.assertRaises(EvidenceRejected):
+            read(req, manifest, payload)
+
     def test_dev_rows_and_source_tiers(self):
         req, manifest, payload = invented()
         result = read(req, manifest, payload)
