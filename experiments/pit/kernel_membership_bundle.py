@@ -1,8 +1,8 @@
-"""FIQ-07 invented-only wire-format validation for the proposed Kernel bundle.
+"""FIQ-07 invented-only Kernel wire-format validation.
 
-No I/O or production adapter. The Kernel's current 2025 synthetic profile
-cannot produce the separately required development-window ROWS proof.
-Accepting this shape never authorizes real bundles, OD-1 aggregates or U1.
+No I/O or production adapter. Besides in-memory synthetic development shapes,
+this consumer accepts the pinned native-producer 2022 invented fixture profile.
+Neither demonstrates real source access, authorized ROWS, OD-1 aggregates or U1.
 """
 import hashlib
 import hmac
@@ -26,6 +26,8 @@ _ROW = {"source_code", "tier_cell", "tier", "source_evidence_id", "member_kind",
         "known_at_upper", "assertion_ids"}
 _SEARCH = {"search_date", "query", "result_count", "intra_period_flag", "evidence_id"}
 _SETTLE = {"checkpoint_ref", "accepted_cutoff", "proof_kind"}
+# Additional reviewed source-year profile: only invented 2022 fixture bytes.
+_NATIVE_DEVELOPMENT_PROFILES = frozenset({"DATASTORE3184_FINAL_2022"})
 
 
 def _deny():
@@ -56,6 +58,12 @@ def _syn(s):
         _deny()
 
 
+def _native_profile_year_matches(profile, quarters):
+    """Pure source-year constraint; independently mutation-tested with coherent wire."""
+    return (profile not in _NATIVE_DEVELOPMENT_PROFILES
+            or all(q.startswith("2022Q") for q in quarters))
+
+
 def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_sha256):
     """Validate invented development-window manifest/payload structure and hashes.
 
@@ -80,7 +88,8 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
             or request["recipient"] != "SYNTHETIC_TEST_ONLY"
             or request["mode"] not in ("ROWS", "COUNTS_ONLY")
             or type(request["profile"]) is not str
-            or not request["profile"].startswith("SYNTHETIC_DEVELOPMENT_")
+            or not (request["profile"].startswith("SYNTHETIC_DEVELOPMENT_")
+                    or request["profile"] in _NATIVE_DEVELOPMENT_PROFILES)
             or type(quarters) is not list or not quarters
             or any(type(q) is not str
                    or re.fullmatch(r"20[0-2][0-9]Q[1-4]", q) is None
@@ -88,6 +97,9 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
             or quarters != sorted(set(quarters))
             or type(request["coordinates"]) is not list
             or len(request["coordinates"]) != len(quarters)):
+        _deny()
+    # Native source-year profiles may not be relabelled as another year.
+    if not _native_profile_year_matches(request["profile"], quarters):
         _deny()
     coords, cutoffs = {}, set()
     for q, coord in zip(quarters, request["coordinates"]):
