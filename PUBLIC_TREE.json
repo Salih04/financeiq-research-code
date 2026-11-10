@@ -16,9 +16,9 @@
       "sha256": "8f9e5f64c41503f17e6f1fed5400c4a52cece8c9e60176fbafea3c7ef8ce04bd"
     },
     {
-      "bytes": 2592,
+      "bytes": 3297,
       "path": "README.md",
-      "sha256": "5f03bd82dffb8f132993e5245378772aef2f1828f8246f12c57a01d342376fcb"
+      "sha256": "c58d09632392c9cb7531230147e0b4b3ad17b8e3f767e5b32a5c13a0df9cfc03"
     },
     {
       "bytes": 1343,
@@ -556,9 +556,9 @@
       "sha256": "1bec4daa35dd1807d060e6b4b83dc8f84fb5b3d30977c1d80ba07fd48599112f"
     },
     {
-      "bytes": 6220,
+      "bytes": 6527,
       "path": "docs/TEST_ACCOUNTING.md",
-      "sha256": "12860ccc5d6addfd25900df9b84495d59356e211e727c4665c2bf1176d5aa26a"
+      "sha256": "767860b21e560da9e2a08d95fbc45644a383bd5f3e1e6fc5ce3034a5dbf5d82b"
     },
     {
       "bytes": 1998,
@@ -686,14 +686,29 @@
       "sha256": "fcf23b3594bda19aa71cc04a5236efcad4aa69f2a8cc619bc506894033e754fa"
     },
     {
+      "bytes": 3489,
+      "path": "experiments/pit/fixtures/membership_evidence/invented.json",
+      "sha256": "f66949afb64944f4b2b31a2adb334c337535bd1939ba0ffce4a338c5dad4d7dc"
+    },
+    {
       "bytes": 3709,
       "path": "experiments/pit/guard.py",
       "sha256": "f22882c2494b6eb0a6489d37d8a14a21d38644ebfb3a796c2a39d1d1cda3d4f5"
     },
     {
+      "bytes": 10600,
+      "path": "experiments/pit/kernel_membership_bundle.py",
+      "sha256": "29b48ace01c8ad1315ce31a17a39e6760a2f1f10ff07f6dfed9721e6543fed9a"
+    },
+    {
       "bytes": 14969,
       "path": "experiments/pit/kernel_snapshot.py",
       "sha256": "f1a4b45411902ebb6dc20b4d2899bf9708d5f836b30ec23b5a45b01e279fa62a"
+    },
+    {
+      "bytes": 12360,
+      "path": "experiments/pit/membership_evidence.py",
+      "sha256": "338ab2003c0741cfbddf1cca9de55f426057401429d504700b6c5f11c3f9ecb5"
     },
     {
       "bytes": 8113,
@@ -711,9 +726,19 @@
       "sha256": "6762375f421a3a9ee7d4144a4cd083c99f5238feb799a4d066659b18ef5ec3a2"
     },
     {
+      "bytes": 9011,
+      "path": "experiments/pit/test_kernel_membership_bundle.py",
+      "sha256": "32fafecca1321785f0d84d4dcfd8408c00c9e9bfc05e6a2dc8ccdd80a5809461"
+    },
+    {
       "bytes": 16407,
       "path": "experiments/pit/test_kernel_snapshot.py",
       "sha256": "4df17b6763e624e06b3d12981ddb47f9126e2c70a3eee870367e695d36085e6a"
+    },
+    {
+      "bytes": 7702,
+      "path": "experiments/pit/test_membership_evidence.py",
+      "sha256": "437d10e47d91b1f8afc9a1ed70566b9ca9af936fb030ab9aa434a1458fa8d280"
     },
     {
       "bytes": 8842,
@@ -981,9 +1006,9 @@
       "sha256": "344385d7bd7ed00c8b6e38a24616a6ac652e9567aa39a651a26c8530f4b83861"
     },
     {
-      "bytes": 2906,
+      "bytes": 3144,
       "path": "scripts/public_safe_tests.py",
-      "sha256": "de9691847023c2fab3011746bd68db9e647594c680e09d9875d6746b34db8415"
+      "sha256": "60607495a97891e99282c9d33a6ff471e5776008437480c451d4bfd76a14740f"
     },
     {
       "bytes": 441,

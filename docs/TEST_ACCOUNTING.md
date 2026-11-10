@@ -7,6 +7,8 @@ below; none of the private tests is claimed as passed by public CI.
 | --- | ---: | --- |
 | PIT synthetic consumer | 16 / 16, zero skips | Existing approved suite; unchanged source and fixtures |
 | Research-core synthetic | 21 / 21, zero skips | Existing approved suite; unchanged source |
+| FIQ-07 membership-evidence invented synthetic consumer (authorized 2026-11-09) | 18 / 18, zero skips | New public invented-only suite; does not change prior 16+21 |
+| FIQ-07 development-window wire-shape invented tests | 8 / 8, zero skips | No real Kernel round-trip or approved new source-year profile |
 | Root `tests/` | 0; entire suite private-only | 1456 collected in the dated approved baseline; 1441 Linux executions + 15 governed deselections |
 | Backend `backend/tests/` | 0; entire suite private-only | 916 collected/executed in the dated approved hosted baseline |
 | Frontend E2E | NOT RUN | Private local runbook; no authoritative collected count: UNSET |
