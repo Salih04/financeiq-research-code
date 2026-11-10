@@ -1,12 +1,8 @@
-"""FIQ-07 synthetic-only fail-first probes for ORIGINAL public consumer module.
+"""FIQ-07 owner-adopted F1/F2 synthetic tests for the original consumer.
 
-Run from a clean checkout of Salih04/financeiq-research-code pinned to
-5b1030ad9e6760af22f5f8fc0cf36a355b9f6df8:
-
-    PYTHONPATH=. python -m unittest -v experiments.pit.test_fiq07_fable_exact_module
-
-This suite intentionally FAILS at baseline for the two unpatched candidates.
-No real DataStore data, network, holdout, price, returns, or source rights used.
+F1: Istanbul archive-search execution civil date <= system_as_of civil date.
+F2: cross-quarter assertion ID binds (member_kind, member_id, status).
+All fixtures are invented; no source, network, price, results or DSA access.
 """
 import copy
 import hashlib
@@ -85,6 +81,24 @@ class OriginalModuleFableFailFirst(unittest.TestCase):
                 with self.assertRaises(EvidenceRejected):
                     read(req, man, pay)
 
+    def test_F1_same_istanbul_day_is_accepted(self):
+        for cutoff in ('2022-10-10T00:00:00Z', '2022-10-09T22:30:00Z'):
+            with self.subTest(system_as_of=cutoff):
+                req, man, pay = invented()
+                req['coordinates'][0]['system_as_of'] = cutoff
+                pay['quarters'][0]['settlement']['accepted_cutoff'] = cutoff
+                pay['quarters'][0]['archive_search']['search_date'] = '2022-10-10'
+                _rebind(req, man, pay)
+                self.assertEqual(read(req, man, pay)['quarters'][0]['status'],
+                                 'EVIDENCED')
+
+    def test_F1_no_execution_date_lower_bound(self):
+        req, man, pay = invented()
+        pay['quarters'][0]['archive_search']['search_date'] = '1999-01-01'
+        _rebind(req, man, pay)
+        self.assertEqual(read(req, man, pay)['quarters'][0]['status'],
+                         'EVIDENCED')
+
     def test_F2_assertion_reuse_for_another_listing_rejected(self):
         # A reused Q3 assertion is pasted into a distinct Q4 LISTING; both
         # positive and explicit negative variants must fail rather than
@@ -98,10 +112,34 @@ class OriginalModuleFableFailFirst(unittest.TestCase):
                 with self.assertRaises(EvidenceRejected):
                     read(req, man, pay)
 
+    def test_F2_same_member_status_flip_rejected(self):
+        req, man, pay = two_quarters()
+        q3, q4 = (q['rows'] for q in pay['quarters'])
+        # Avoid an unrelated same-quarter member collision.
+        q3[100]['member_id'] = 'SYN-Q3-ALT-MEMBER-100'
+        q3[1]['member_id'] = q4[100]['member_id']
+        q4[100]['assertion_ids'] = list(q3[1]['assertion_ids'])
+        self.assertEqual(q3[1]['status'], 'MEMBER')
+        self.assertEqual(q4[100]['status'], 'NOT_MEMBER')
+        _rebind(req, man, pay)
+        with self.assertRaises(EvidenceRejected):
+            read(req, man, pay)
+
+    def test_F2_changed_source_locator_same_statement_is_accepted(self):
+        req, man, pay = two_quarters()
+        q3, q4 = (q['rows'] for q in pay['quarters'])
+        self.assertEqual(q3[1]['member_id'], q4[1]['member_id'])
+        self.assertEqual(q3[1]['status'], q4[1]['status'])
+        self.assertNotEqual(q3[1]['tier_cell'], q4[1]['tier_cell'])
+        q4[1]['assertion_ids'] = list(q3[1]['assertion_ids'])
+        q4[1]['source_evidence_id'] = 'SYN-Q4-RELOCATED-001'
+        self.assertNotEqual(q3[1]['source_evidence_id'], q4[1]['source_evidence_id'])
+        _rebind(req, man, pay)
+        self.assertEqual([q['status'] for q in read(req, man, pay)['quarters']],
+                         ['EVIDENCED', 'EVIDENCED'])
+
     def test_control_same_listing_cross_quarter_reuse_if_namespace_is_global(self):
-        # This control encodes the PROPOSED identity-binding rule, not a
-        # blanket prohibition on same-assertion across quarters. Its semantic
-        # authority must be approved before merging any fix.
+        # Adopted: same immutable member/status statement across quarters is legal.
         req, man, pay = two_quarters()
         pay['quarters'][1]['rows'][1]['assertion_ids'] = list(
             pay['quarters'][0]['rows'][1]['assertion_ids'])

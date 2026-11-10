@@ -1,32 +1,14 @@
-# FIQ-07 Fable candidate reproduction - archival DRAFT (2026-11-10)
+# FIQ-07 F1/F2 v1.0.0 fix — original-module synthetic verification
 
-Public base: `5b1030ad9e6760af22f5f8fc0cf36a355b9f6df8`.
+Owner-adopted decision: [FIQ-07 issue #10](https://github.com/Salih04/financeiq-research-code/issues/10#issuecomment-6781248365) and `FIQ07_F1_F2_OWNER_DECISION_2026-11-10.md`.
 
-This branch is **intentionally RED / FAIL-FIRST**. The added test file imports
-the ORIGINAL public consumer `open_kernel_wire_synthetic` and its existing
-invented-only helper, not the earlier reconstructed surrogate. It provides
-three existing-behavior controls, two expected-rejection candidate methods with
-two subcases each, and a same-listing cross-quarter control. It changes NO
-production code, source rights, native synthetic fixture or scientific rule.
+Original fail-first [CI #42907961629](https://github.com/Salih04/financeiq-research-code/actions/runs/42907961629) is historical: 67 baseline test methods passed, four positive controls passed, and two negative-test methods produced four failing subtest reports. The F1/F2 acceptance cases were reproduced in the actual original module, not only a surrogate.
 
-After an exact-head hosted GitHub CI run, inspect the two failure methods and
-confirm all controls pass. Failure is expected **only in this draft branch**;
-it is NOT merge-ready. Before a production patch, owner must fix the versioned
-meaning of `archive_search.search_date` (execution vs archive coverage; civil
-date same-day ambiguity), and decide if `assertion_ids` have cross-quarter
-identity scope. The candidate `FIQ07_FABLE_CANDIDATE_FIX.diff` is stored
-for historical review ONLY and has not been applied.
+**Applied to this draft PR #15:**
+- F1 `archive_search.search_date` = execution civil day in Europe/Istanbul. Compare only with Istanbul civil date of `system_as_of`: same day and earlier allowed, later refused. No lower bound in v1.0.0. Do not compare to `as_of`.
+- F2 immutable KER-09 statement version: enforce `assertion_id → (member_kind, member_id, status)` across all quarters. Different member/status under one ID refused; same member/status repeated across quarters permitted. `source_evidence_id`, tier and `tier_cell` are per-quarter row locators and are not bound to an assertion ID. Document identity, revision and interval coverage remain with KER-09 producer.
+- Required tests: F1 late dates 2022-10-11 / 2030-01-01 rejected, same Istanbul day (including UTC boundary) and 1999 no-lower-bound accepted; F2 different member and same member status flip rejected, same statement repeated and changed `source_evidence_id`/tier cell accepted.
+- Native invented 2022 fixture bytes unchanged. Existing suite counts 16+21+18+8+4=67; new Fable consumer suite = 10, target 77/77 with zero skips. Runner, `docs/TEST_ACCOUNTING.md`, and exact `PUBLIC_TREE.json` hashes must agree.
+- **Merge gate:** hosted exact-head PR CI 77/77, zero skips, then one genuine independent reviewer pinned to that unchanged head; no merge solely from this document. Keep PR draft before review.
 
-The accepted native invented producer 2022 fixture has archive search dates
-after formation but before its 2026 system snapshot. Never enforce
-`search_date <= as_of` and do not decide a 1999 lower bound from this audit.
-
-Baseline synthetic suites: 16+21+18+8+4 = 67 PASS. New test module: 6
-registered cases; new expected collection count 73. All existing tests must
-stay green; only the two Fable candidates are expected fail-first. Any final
-fix requires no skips, 73/73 passing exact-head CI, separate review and owner
-merge. The public allowlist and test accounting are changed in this DRAFT
-only; public main stays unchanged.
-
-No private Kernel files, DataStore source, real ROWS/COUNTS_ONLY, outcome,
-holdout, price, DSA, Study 4 logging or OSF. `NO_NEW_OUTCOME_INSPECTION=true`.
+Scope is **invented-only public consumer**. No private Kernel source, DataStore real ROWS or aggregate contents, provider rights access, market outcomes, DSA installation/logging, model choice, Study 4 execution or OSF. `NO_NEW_OUTCOME_INSPECTION=true`.

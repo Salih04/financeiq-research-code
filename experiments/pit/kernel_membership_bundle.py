@@ -144,6 +144,8 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
             or type(m["source_lineage"]) is not dict):
         _deny()
     available = set()
+    # KER-09 immutable assertion versions retain their member and status.
+    assertion_statements = {}
     for q, part in zip(quarters, e["quarters"]):
         if type(part) is not dict or part.get("quarter") != q:
             _deny()
@@ -167,7 +169,12 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
                 _deny()
             _syn(settled["checkpoint_ref"])
             archive = part["archive_search"]
-            _date(archive["search_date"])
+            # Search execution civil day is Europe/Istanbul, not formation as_of.
+            search_day = _date(archive["search_date"])
+            settled_day = _time(coords[q]["system_as_of"]).astimezone(
+                ZoneInfo("Europe/Istanbul")).date()
+            if search_day > settled_day:
+                _deny()
             _syn(archive["query"])
             _syn(archive["evidence_id"])
             if (type(archive["result_count"]) is not int or archive["result_count"] < 0
@@ -214,6 +221,11 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
                     if aid in assertion_ids:
                         _deny()
                     assertion_ids.add(aid)
+                    statement = (row["member_kind"], row["member_id"], row["status"])
+                    if (aid in assertion_statements
+                            and assertion_statements[aid] != statement):
+                        _deny()
+                    assertion_statements[aid] = statement
                 if _time(row["known_at_upper"]) > _time(coords[q]["as_of"]):
                     _deny()
                 if row["status"] == "MEMBER":
