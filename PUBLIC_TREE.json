@@ -611,6 +611,11 @@
       "sha256": "a4824d6ef670de9d38531faf0938cf18c0bf6b90c92bad04bd0c55959cf064fe"
     },
     {
+      "bytes": 11194,
+      "path": "docs/research/FIQ07_SEALED_ADVERSARIAL_AUDIT_PACKET.md",
+      "sha256": "e79a90aa8aa7c348d89735dffb86644cd978c46164c935843f0f5b73fef48efb"
+    },
+    {
       "bytes": 11022,
       "path": "docs/research/OWNER_DECISION_ADDENDUM.md",
       "sha256": "f6c606412754bf4c7f08cb445092e8617270e3bc5ab9bd7d3cf59be904a1bc22"
