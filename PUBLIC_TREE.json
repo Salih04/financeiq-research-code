@@ -16,9 +16,9 @@
       "sha256": "8f9e5f64c41503f17e6f1fed5400c4a52cece8c9e60176fbafea3c7ef8ce04bd"
     },
     {
-      "bytes": 3297,
       "path": "README.md",
-      "sha256": "c58d09632392c9cb7531230147e0b4b3ad17b8e3f767e5b32a5c13a0df9cfc03"
+      "bytes": 3551,
+      "sha256": "5024bd597b3d5af5bc038cb4dcd8acf5b1ae6bcbc48e485940a9fdc321cc0d0f"
     },
     {
       "bytes": 1343,
@@ -556,9 +556,9 @@
       "sha256": "1bec4daa35dd1807d060e6b4b83dc8f84fb5b3d30977c1d80ba07fd48599112f"
     },
     {
-      "bytes": 6527,
       "path": "docs/TEST_ACCOUNTING.md",
-      "sha256": "767860b21e560da9e2a08d95fbc45644a383bd5f3e1e6fc5ce3034a5dbf5d82b"
+      "bytes": 6693,
+      "sha256": "49900240f8ccf2ee77d07ca09142088069442f6969f3dfa26d5205ed37cad1fc"
     },
     {
       "bytes": 1998,
@@ -706,9 +706,9 @@
       "sha256": "f22882c2494b6eb0a6489d37d8a14a21d38644ebfb3a796c2a39d1d1cda3d4f5"
     },
     {
-      "bytes": 10600,
       "path": "experiments/pit/kernel_membership_bundle.py",
-      "sha256": "29b48ace01c8ad1315ce31a17a39e6760a2f1f10ff07f6dfed9721e6543fed9a"
+      "bytes": 11241,
+      "sha256": "53d07efe30aeac1996e7650c57c2a6dca298fc415bcad9aa4925d52ec34c9ce7"
     },
     {
       "bytes": 14969,
@@ -739,6 +739,11 @@
       "bytes": 9011,
       "path": "experiments/pit/test_kernel_membership_bundle.py",
       "sha256": "32fafecca1321785f0d84d4dcfd8408c00c9e9bfc05e6a2dc8ccdd80a5809461"
+    },
+    {
+      "path": "experiments/pit/test_kernel_membership_native_2022.py",
+      "bytes": 7794,
+      "sha256": "c300d44fd6607adbf1d953d98b2ae712dc23828f5a25b844164104573dc3873b"
     },
     {
       "bytes": 16407,
@@ -819,6 +824,11 @@
       "bytes": 34846,
       "path": "experiments/significance.py",
       "sha256": "08062b5e2e9af9d9a91200665811492c373dc6fa8db1acd0a849cb3d3d932ab3"
+    },
+    {
+      "path": "fixtures/synthetic/membership_evidence_ds3184_2022_v1.json",
+      "bytes": 81633,
+      "sha256": "7aeb20763f05ad60388c2cd832ca865f31f4b8ef6f362b74a9f6c5aa2bd3d735"
     },
     {
       "bytes": 47,
@@ -1016,9 +1026,9 @@
       "sha256": "344385d7bd7ed00c8b6e38a24616a6ac652e9567aa39a651a26c8530f4b83861"
     },
     {
-      "bytes": 3144,
       "path": "scripts/public_safe_tests.py",
-      "sha256": "60607495a97891e99282c9d33a6ff471e5776008437480c451d4bfd76a14740f"
+      "bytes": 3273,
+      "sha256": "53d2f6076547ee0ed472a4dac4b27fc7b126d598a1c0391039c140bcfbbf8809"
     },
     {
       "bytes": 441,
