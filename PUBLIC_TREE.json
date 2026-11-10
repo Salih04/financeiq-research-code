@@ -16,9 +16,9 @@
       "sha256": "8f9e5f64c41503f17e6f1fed5400c4a52cece8c9e60176fbafea3c7ef8ce04bd"
     },
     {
-      "bytes": 3001,
+      "bytes": 3297,
       "path": "README.md",
-      "sha256": "8db31cc0667e2c3067f68f092a286deac24b32d0e34a8a136dad5021da1ae36b"
+      "sha256": "fb55f39d16913dc4819e5e85fb7793e495cd06cb11953392c9329f90236df63d"
     },
     {
       "bytes": 1343,
@@ -556,9 +556,9 @@
       "sha256": "1bec4daa35dd1807d060e6b4b83dc8f84fb5b3d30977c1d80ba07fd48599112f"
     },
     {
-      "bytes": 6387,
+      "bytes": 6527,
       "path": "docs/TEST_ACCOUNTING.md",
-      "sha256": "26e449f9680375e35cd094a112d9483c7493a1bf9c68a4ecc03fbbee04f1aa63"
+      "sha256": "1792a731bb2cc787fe3bac049dfdf1de94d8affcf560fac6fe57fe0e9fff740d"
     },
     {
       "bytes": 1998,
@@ -696,6 +696,11 @@
       "sha256": "f22882c2494b6eb0a6489d37d8a14a21d38644ebfb3a796c2a39d1d1cda3d4f5"
     },
     {
+      "bytes": 9731,
+      "path": "experiments/pit/kernel_membership_bundle.py",
+      "sha256": "9948903d81ba008203d5c5a8a9f1ff4adaf984ea444fd1052bd06532d280e62c"
+    },
+    {
       "bytes": 14969,
       "path": "experiments/pit/kernel_snapshot.py",
       "sha256": "f1a4b45411902ebb6dc20b4d2899bf9708d5f836b30ec23b5a45b01e279fa62a"
@@ -719,6 +724,11 @@
       "bytes": 97,
       "path": "experiments/pit/requirements-synthetic.txt",
       "sha256": "6762375f421a3a9ee7d4144a4cd083c99f5238feb799a4d066659b18ef5ec3a2"
+    },
+    {
+      "bytes": 6493,
+      "path": "experiments/pit/test_kernel_membership_bundle.py",
+      "sha256": "b24b1cf549b273d1ad8cdbb875b170e26ea360d4fe0b863df6dd888679089ef5"
     },
     {
       "bytes": 16407,
@@ -996,9 +1006,9 @@
       "sha256": "344385d7bd7ed00c8b6e38a24616a6ac652e9567aa39a651a26c8530f4b83861"
     },
     {
-      "bytes": 3023,
+      "bytes": 3144,
       "path": "scripts/public_safe_tests.py",
-      "sha256": "8bbcbd7cf08120d4fa95bd7c119ee6c675a1002e882345303a68e2628aa5dbc9"
+      "sha256": "304640dcb274db5f4576dc2bb061f3f843c65200a1ff953780e869077e2d4193"
     },
     {
       "bytes": 441,

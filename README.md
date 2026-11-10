@@ -22,7 +22,8 @@ No Docker build configuration or image is published.
 
 Run `python -B scripts/public_safe_tests.py` after installing
 `requirements-public.txt`. It executes exactly 16 PIT consumer, 21 research-core and 18 new FIQ-07
-membership-evidence invented synthetic tests; missing tests/skips and explicit
+membership-evidence invented synthetic tests, plus 5 development-window
+manifest/payload wire-shape checks; missing tests/skips and explicit
 file-list drift fail closed.
 It does not execute legacy pipelines, acquire data, query SQL or touch holdouts.
 See [test accounting](docs/TEST_ACCOUNTING.md) for the private suite boundaries.
@@ -40,6 +41,10 @@ synthetic-only development of the read-only, one-way membership-evidence 1.0.0
 consumer. Real delivery remains owner-private/local and depends on a merged
 Kernel adapter, current rights and loaded development-window bundles. No
 protected row access, study registration or experiments are authorized here.
+
+The development-window wire-shape tests are invented only, not a native Kernel
+round-trip: the current producer still profiles 2025, pending a reviewed
+pre-2023 layout. Its generic protected-period COUNTS_ONLY is not OD-1 clearance.
 
 No registration, holdout access or experiment permission is created by
 this export. Historical membership must not be reconstructed from current lists;
