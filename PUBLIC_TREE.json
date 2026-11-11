@@ -1,9 +1,9 @@
 {
   "files": [
     {
-      "bytes": 577,
+      "bytes": 617,
       "path": ".github/workflows/public-safe.yml",
-      "sha256": "358bfd4c1aa9486fd778195b2c01dc6c449d1018d640af13e344a4159bb2fee6"
+      "sha256": "2baee16d96d38db6a06fc07f678a3099d2a3bc127e0289376c2c1c1613b20b5b"
     },
     {
       "bytes": 42,
@@ -17,8 +17,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 3551,
-      "sha256": "5024bd597b3d5af5bc038cb4dcd8acf5b1ae6bcbc48e485940a9fdc321cc0d0f"
+      "bytes": 3580,
+      "sha256": "9e57ddea5a2af131287758fe5409e62a2bb55eaf7cce392bc479bce3fd2ac85d"
     },
     {
       "bytes": 1343,
@@ -557,8 +557,8 @@
     },
     {
       "path": "docs/TEST_ACCOUNTING.md",
-      "bytes": 6895,
-      "sha256": "77bf22e39935471cf19c806b25f2d77e649b1e774553af1bb56f330437eb26e2"
+      "bytes": 7002,
+      "sha256": "60e182a53dc4fb7adc3ba17c8bc8cfb9832d436eaa635b66c7fc1ddeb23dcd49"
     },
     {
       "bytes": 1998,
@@ -722,8 +722,8 @@
     },
     {
       "path": "experiments/pit/kernel_membership_bundle.py",
-      "bytes": 11929,
-      "sha256": "9e9849f4f7d66c4523111e8966f553f9268575a3e682c28f0ea9bbca83bdc4f6"
+      "bytes": 12302,
+      "sha256": "e73516933a0141bc2580327b61842aa0468bfdeeb9fff835e9d30e7a326f77f9"
     },
     {
       "bytes": 14969,
@@ -752,8 +752,8 @@
     },
     {
       "path": "experiments/pit/test_fiq07_fable_exact_module.py",
-      "bytes": 7274,
-      "sha256": "dcf21501ff45ee77ab586515b8d7152d26f165977e97a6501d40b072ed0caa8a"
+      "bytes": 8842,
+      "sha256": "239ed4c2ce20d31dd4001c58003fab9632d38b28e0164632a87b83e4228c168d"
     },
     {
       "bytes": 9011,
@@ -1048,7 +1048,7 @@
     {
       "path": "scripts/public_safe_tests.py",
       "bytes": 3396,
-      "sha256": "b9e727434c8eb253bbc9a1461b5fb2f2d0c2de33e47610e801947d54adec2ba7"
+      "sha256": "bab3a1b1be610a2c2ac0aa067c020054d8403135f60290a160fe6cacc640549d"
     },
     {
       "bytes": 441,

@@ -21,11 +21,11 @@ No Docker build configuration or image is published.
 ## Verification
 
 Run `python -B scripts/public_safe_tests.py` after installing
-`requirements-public.txt`. It executes exactly 16 PIT consumer, 21 research-core and 18 new FIQ-07
-membership-evidence invented synthetic tests, plus 8 development-window
-manifest/payload wire-shape checks and 4 pinned native producer 2022 fixture
-interoperability tests (67 total); missing tests/skips and explicit
-file-list drift fail closed.
+`requirements-public.txt`. It executes 79 synthetic tests across six suites.
+The suites cover 16 PIT consumer checks, 21 research-core checks, 18 FIQ-07
+membership-evidence checks, 8 development-window wire-shape checks, 4 pinned
+native 2022 fixture interoperability checks, and 12 FIQ-07 F1/F2 contract
+checks. The runner fails on missing tests, skips, or file-list drift.
 It does not execute legacy pipelines, acquire data, query SQL or touch holdouts.
 See [test accounting](docs/TEST_ACCOUNTING.md) for the private suite boundaries.
 

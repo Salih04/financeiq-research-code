@@ -8,7 +8,7 @@ import hashlib
 import hmac
 import json
 import re
-from datetime import datetime, time, timezone
+from datetime import date, datetime, time, timezone
 from zoneinfo import ZoneInfo
 
 from .membership_evidence import EvidenceRejected, _json, _hash, _time, _date, _synthetic_id
@@ -171,8 +171,16 @@ def open_kernel_wire_synthetic(manifest, payload, *, request, expected_manifest_
             archive = part["archive_search"]
             # Search execution civil day is Europe/Istanbul, not formation as_of.
             search_day = _date(archive["search_date"])
-            settled_day = _time(coords[q]["system_as_of"]).astimezone(
-                ZoneInfo("Europe/Istanbul")).date()
+            cutoff = _time(coords[q]["system_as_of"])
+            istanbul = ZoneInfo("Europe/Istanbul")
+            try:
+                settled_day = cutoff.astimezone(istanbul).date()
+            except OverflowError:
+                # An offset under 24 hours can only overflow upward on the
+                # final UTC day. Every representable search day is then earlier.
+                if cutoff.date() != date.max:
+                    _deny()
+                settled_day = date.max
             if search_day > settled_day:
                 _deny()
             _syn(archive["query"])

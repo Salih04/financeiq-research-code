@@ -10,7 +10,8 @@ below; none of the private tests is claimed as passed by public CI.
 | FIQ-07 membership-evidence invented synthetic consumer (authorized 2026-11-09) | 18 / 18, zero skips | New public invented-only suite; does not change prior 16+21 |
 | FIQ-07 development-window wire-shape invented tests | 8 / 8, zero skips | Invented in-memory schema-shape tests, not native producer |
 | FIQ-07 pinned 2022 native synthetic fixture consumer tests | 4 / 4, zero skips | Byte-identical fixture from merged Kernel PR #31; no live producer or real data use |
-| FIQ-07 F1/F2 owner-adopted consumer tests (2026-11-10) | 10 / 10, zero skips | Invented-only Istanbul execution-day and KER-09 statement identity tests; byte-identical native 2022 fixture preserved |
+| FIQ-07 F1/F2 owner-adopted consumer tests (2026-11-10) | 12 / 12, zero skips | Invented-only Istanbul execution-day tests including the upper date boundary, and KER-09 statement identity tests |
+| Total public synthetic tests | 79 / 79, zero skips | Includes the pinned native 2022 invented fixture tests |
 | Root `tests/` | 0; entire suite private-only | 1456 collected in the dated approved baseline; 1441 Linux executions + 15 governed deselections |
 | Backend `backend/tests/` | 0; entire suite private-only | 916 collected/executed in the dated approved hosted baseline |
 | Frontend E2E | NOT RUN | Private local runbook; no authoritative collected count: UNSET |

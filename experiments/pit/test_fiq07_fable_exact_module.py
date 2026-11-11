@@ -99,6 +99,38 @@ class OriginalModuleFableFailFirst(unittest.TestCase):
         self.assertEqual(read(req, man, pay)['quarters'][0]['status'],
                          'EVIDENCED')
 
+    def test_F1_search_at_upper_istanbul_boundary_is_accepted(self):
+        for cutoff, day in (
+            ('9999-12-30T21:00:00Z', '9999-12-31'),
+            ('9999-12-31T20:59:59.999999Z', '9999-12-31'),
+            ('9999-12-31T21:00:00Z', '2022-10-10'),
+            ('9999-12-31T23:59:59.999999Z', '9999-12-31'),
+        ):
+            with self.subTest(system_as_of=cutoff, search_date=day):
+                req, man, pay = invented()
+                req['coordinates'][0]['system_as_of'] = cutoff
+                quarter = pay['quarters'][0]
+                quarter['settlement']['accepted_cutoff'] = cutoff
+                quarter['archive_search']['search_date'] = day
+                _rebind(req, man, pay)
+                self.assertEqual(read(req, man, pay)['quarters'][0]['status'],
+                                 'EVIDENCED')
+
+    def test_F1_late_or_unrepresentable_search_at_upper_boundary_is_rejected(self):
+        for cutoff, day in (
+            ('9999-12-30T20:59:59.999999Z', '9999-12-31'),
+            ('9999-12-31T21:00:00Z', '10000-01-01'),
+        ):
+            with self.subTest(system_as_of=cutoff, search_date=day):
+                req, man, pay = invented()
+                req['coordinates'][0]['system_as_of'] = cutoff
+                quarter = pay['quarters'][0]
+                quarter['settlement']['accepted_cutoff'] = cutoff
+                quarter['archive_search']['search_date'] = day
+                _rebind(req, man, pay)
+                with self.assertRaises(EvidenceRejected):
+                    read(req, man, pay)
+
     def test_F2_assertion_reuse_for_another_listing_rejected(self):
         # A reused Q3 assertion is pasted into a distinct Q4 LISTING; both
         # positive and explicit negative variants must fail rather than
