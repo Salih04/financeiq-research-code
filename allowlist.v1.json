@@ -1,0 +1,25 @@
+{
+  "schema": "study4-p0-allowlist/1",
+  "upstream_review_pin": "ef44660f00e08ce66dcd4dc4d2e700836c45e833",
+  "unknown": "deny_and_latch",
+  "profiles": {
+    "unapproved_runtime": {
+      "allow": []
+    },
+    "invented_oracle": {
+      "allow": [
+        "fixture.read",
+        "seal.stage"
+      ],
+      "observed_launch": {
+        "entrypoint": "pure-oracle/1",
+        "source_imports": false,
+        "socket_access": false,
+        "ambient_storage": false,
+        "background_jobs": false,
+        "history_feedback": false,
+        "runtime_override": false
+      }
+    }
+  }
+}
