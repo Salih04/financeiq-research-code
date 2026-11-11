@@ -1,9 +1,9 @@
 {
   "files": [
     {
-      "bytes": 577,
+      "bytes": 617,
       "path": ".github/workflows/public-safe.yml",
-      "sha256": "358bfd4c1aa9486fd778195b2c01dc6c449d1018d640af13e344a4159bb2fee6"
+      "sha256": "2baee16d96d38db6a06fc07f678a3099d2a3bc127e0289376c2c1c1613b20b5b"
     },
     {
       "bytes": 42,
@@ -17,8 +17,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 3551,
-      "sha256": "5024bd597b3d5af5bc038cb4dcd8acf5b1ae6bcbc48e485940a9fdc321cc0d0f"
+      "bytes": 3580,
+      "sha256": "9e57ddea5a2af131287758fe5409e62a2bb55eaf7cce392bc479bce3fd2ac85d"
     },
     {
       "bytes": 1343,
@@ -557,8 +557,8 @@
     },
     {
       "path": "docs/TEST_ACCOUNTING.md",
-      "bytes": 6693,
-      "sha256": "49900240f8ccf2ee77d07ca09142088069442f6969f3dfa26d5205ed37cad1fc"
+      "bytes": 7002,
+      "sha256": "60e182a53dc4fb7adc3ba17c8bc8cfb9832d436eaa635b66c7fc1ddeb23dcd49"
     },
     {
       "bytes": 1998,
@@ -599,6 +599,21 @@
       "bytes": 2845,
       "path": "docs/process/STUDY_RECORD_TEMPLATE.md",
       "sha256": "e2516099ebcdaa881d8243ef13f5a8f42c1efbf4330aa9f7e50604f64dca7347"
+    },
+    {
+      "path": "docs/research/FIQ07_F1_F2_OWNER_DECISION_2026-11-10.md",
+      "bytes": 2229,
+      "sha256": "de1e88aac9de8394925198b6472f4291be8443ffd062deba5720b2b638ceda6b"
+    },
+    {
+      "path": "docs/research/FIQ07_FABLE_CANDIDATE_FIX.diff",
+      "bytes": 847,
+      "sha256": "9bc92fa100ddcf003984d167a75face6562434c529aa430c9213e52e2b939700"
+    },
+    {
+      "path": "docs/research/FIQ07_FABLE_REPRO_GUIDE.md",
+      "bytes": 2244,
+      "sha256": "4f0845ccfd1bab5e46e71e9ebbee1c2361b1427e7c4527984db87a1269da8dc5"
     },
     {
       "bytes": 13698,
@@ -707,8 +722,8 @@
     },
     {
       "path": "experiments/pit/kernel_membership_bundle.py",
-      "bytes": 11241,
-      "sha256": "53d07efe30aeac1996e7650c57c2a6dca298fc415bcad9aa4925d52ec34c9ce7"
+      "bytes": 12302,
+      "sha256": "e73516933a0141bc2580327b61842aa0468bfdeeb9fff835e9d30e7a326f77f9"
     },
     {
       "bytes": 14969,
@@ -734,6 +749,11 @@
       "bytes": 97,
       "path": "experiments/pit/requirements-synthetic.txt",
       "sha256": "6762375f421a3a9ee7d4144a4cd083c99f5238feb799a4d066659b18ef5ec3a2"
+    },
+    {
+      "path": "experiments/pit/test_fiq07_fable_exact_module.py",
+      "bytes": 8842,
+      "sha256": "239ed4c2ce20d31dd4001c58003fab9632d38b28e0164632a87b83e4228c168d"
     },
     {
       "bytes": 9011,
@@ -1027,8 +1047,8 @@
     },
     {
       "path": "scripts/public_safe_tests.py",
-      "bytes": 3273,
-      "sha256": "53d2f6076547ee0ed472a4dac4b27fc7b126d598a1c0391039c140bcfbbf8809"
+      "bytes": 3396,
+      "sha256": "bab3a1b1be610a2c2ac0aa067c020054d8403135f60290a160fe6cacc640549d"
     },
     {
       "bytes": 441,

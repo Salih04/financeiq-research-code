@@ -1,0 +1,17 @@
+# FIQ-07 original candidate patch — superseded, DO NOT APPLY
+#
+# Historical context: the pre-owner candidate validated archive date only
+# tentatively and mapped assertion_id to (member_kind, member_id) WITHOUT
+# status. That patch was never a sufficient final contract implementation.
+#
+# Owner's adopted 2026-11-10 F1/F2 decision is preserved at:
+# docs/research/FIQ07_F1_F2_OWNER_DECISION_2026-11-10.md
+#
+# The actual, corrected implementation is in:
+# experiments/pit/kernel_membership_bundle.py on public draft PR #15.
+# Inspect GitHub PR #15 Files changed for authoritative applied code.
+# The checks bind (member_kind, member_id, status) and compare archive
+# search execution Istanbul day against the Istanbul system_as_of date.
+#
+# This archival note is not a patch, fixture, permission or test result.
+# NO_NEW_OUTCOME_INSPECTION=true

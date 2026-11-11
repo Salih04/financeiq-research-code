@@ -55,6 +55,7 @@ def main():
         ('membership-evidence-synthetic', loader.loadTestsFromName('experiments.pit.test_membership_evidence'), 18),
         ('membership-wire-dev-synthetic', loader.loadTestsFromName('experiments.pit.test_kernel_membership_bundle'), 8),
         ('membership-native-2022-synthetic', loader.loadTestsFromName('experiments.pit.test_kernel_membership_native_2022'), 4),
+        ('fiq07-fable-contract-synthetic', loader.loadTestsFromName('experiments.pit.test_fiq07_fable_exact_module'), 12),
     ]
     rows = []
     ok = True
