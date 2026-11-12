@@ -116,6 +116,17 @@ prices should remain available; the universe card verifies this. Rejected: the
 backwards (survivorship look-ahead); all listed firms as the primary universe
 (delisted small caps are largely missing from free price sources).
 
+**Amendment P1 (owner, 2026-11-12; prospective).** Each study's primary universe now fits its question,
+staged behind a coverage gate fixed in a dated memo before any profiling:
+- U1 is primary for Paper 1, Paper 2 and Study 4.
+- U2 (screened, survivor-inclusive, nested with all U1 members) is primary for Study 3, but only if the gate
+  passes; otherwise Study 3 is not registered and its holdout stays unopened.
+- The fund-flow candidate stays unregistered until a holdings profile is mapped by a rule written beforehand.
+
+The rejection above becomes a gate condition: coverage of departed firms is tested on development years only
+before U2 can be primary anywhere. U1 rule 2.0.0 and the holdout boundaries are unchanged. Record:
+[P1 decision](../research/P1_UNIVERSE_ARCHITECTURE_DECISION_2026-11-12.md).
+
 **Ownership.** The PIT Kernel stores membership intervals, identities, filings
 and prices, outcome-blind. FinanceIQ owns the universe rule and applies it to
 Kernel snapshots.
@@ -188,7 +199,7 @@ New:
 |---|---|---|
 | Paper 1 — audit | How much do two look-aheads inflate an ML-for-finance evaluation in an emerging market: publication timing (measured by the point-in-time audit) and cohort selection (measured by re-running the frozen capstone design on U1, specification committed before the run)? | Draft can start; selection measurement waits for U1 data |
 | Paper 2 — disclosure event study | How do prices react to KAP financial-statement disclosures relative to a pre-specified earnings surprise, and how much of a firm's move is attributable to market, rates, FX and flow factors versus firm-specific news? Did the IAS 29 transition change the relation? | Design, then pre-registration on OSF |
-| Study 3 — open modeling | On the U1 quarterly point-in-time panel, does any model family carry out-of-sample information about pre-specified targets after multiplicity adjustment? | Exploration in the development window, then a confirmatory pre-registration |
+| Study 3 — open modeling | On the U1 quarterly point-in-time panel, does any model family carry out-of-sample information about pre-specified targets after multiplicity adjustment? | Exploration in the development window, then a confirmatory pre-registration. Primary universe U2 if the P1 coverage gate passes (N ≥ 486); otherwise not registered ([P1](../research/P1_UNIVERSE_ARCHITECTURE_DECISION_2026-11-12.md)) |
 | Study 4 — LLM agent forward test | Does the daily score of a widely used open-source LLM stock-research agent carry out-of-sample information about BIST excess returns, measured forward from a configuration frozen before logging starts? | Owner-approved candidate (2026-11-10): [design card](../study4/DESIGN_CARD.md) and [draft pre-registration](../study4/OSF_PREREGISTRATION_DRAFT.md); not registered |
 | Later | Fund-flow pressure; sponsor or bank data; CDS and credit spreads | Deferred |
 
@@ -208,3 +219,6 @@ product with a narrow research line → open research program, §1), K4 (Kernel 
 prices, corporate actions, macro), K6 (paper order → §6), K8 (Panel v2 parked
 → superseded by U1), K15 (survivorship left unresolved → U1 rebuild). The
 capstone scope in `docs/process/PRD.md` is now the Capstone v1 record.
+
+In this charter, §4's single primary universe for every study is replaced by the per-study assignment of
+Amendment P1 (2026-11-12).

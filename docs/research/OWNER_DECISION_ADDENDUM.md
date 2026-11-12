@@ -126,3 +126,21 @@ source adequacy and the reviewed consumer; G03, U2, feasible window, rights,
 immutable source binding and study-specific registration/access gates remain
 open. The historical v1.0.0 scoped adoption and prior evaluation/exposure history
 above remain unchanged.
+
+## P1: per-study universe architecture, and G3 — 2026-11-12 (prospective)
+
+**Owner decision provenance:** explicit owner answers in chat on 2026-11-12, Europe/Zurich, after consultation
+`CONSULT-2026-11-11-01`. G3 was adopted on 2026-11-11. The owner adopted study-specific primary universes,
+staged behind a coverage gate:
+- U1 for Paper 1 (if at least 75% of the cohort's firm-quarters are U1 members), Paper 2 and Study 4.
+- U2 for Study 3, only if the gate passes. The target is a minimum detectable mean IC of 0.03 at 80% power,
+  so N is at least 486. If the gate fails, Study 3 is not registered and its holdout stays unopened.
+- The fund-flow candidate is deferred.
+
+G3 allows Claude Fable 5.2 for bounded audits and protocol-governed design consultation. It supersedes the
+"Fable is excluded" routing statement in the body of open PR #6.
+
+Full record, deviations and packet hashes:
+[`P1_UNIVERSE_ARCHITECTURE_DECISION_2026-11-12.md`](P1_UNIVERSE_ARCHITECTURE_DECISION_2026-11-12.md).
+Nothing here registers a study, grants data or holdout access, or establishes coverage; the gate memo, the U2
+rule version and the membership-cell semantics check remain open.
