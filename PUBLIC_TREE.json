@@ -591,9 +591,9 @@
       "sha256": "9e1a7444fe73a87889149167658556167458d220214ce01242dffe41377e210b"
     },
     {
-      "bytes": 14573,
+      "bytes": 15676,
       "path": "docs/process/RESEARCH_CHARTER.md",
-      "sha256": "6b5cbbb418d8e9fda675380455b515d9a1600f39a10d1acd133e3d636d5a0a03"
+      "sha256": "e231719e5ebb8067154749e4f016dd47fe2a5b69584a97696a2cf59bbc100cb2"
     },
     {
       "bytes": 2845,
@@ -626,9 +626,14 @@
       "sha256": "a4824d6ef670de9d38531faf0938cf18c0bf6b90c92bad04bd0c55959cf064fe"
     },
     {
-      "bytes": 11022,
+      "bytes": 12194,
       "path": "docs/research/OWNER_DECISION_ADDENDUM.md",
-      "sha256": "f6c606412754bf4c7f08cb445092e8617270e3bc5ab9bd7d3cf59be904a1bc22"
+      "sha256": "e5fe36ebca4af1d7f8363eef234253dd32553ec99b185c3fd1ee40fa2edec4e7"
+    },
+    {
+      "bytes": 9972,
+      "path": "docs/research/P1_UNIVERSE_ARCHITECTURE_DECISION_2026-11-12.md",
+      "sha256": "778cd171b3fc8d1ad7d7f655483cc654c234f3e4bae1844a6a1fbaa5dd52690c"
     },
     {
       "bytes": 13452,
